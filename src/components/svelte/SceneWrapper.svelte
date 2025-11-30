@@ -1,29 +1,43 @@
 <script lang="ts">
-  import * as THREE from 'three';
   import { Canvas } from '@threlte/core';
   import CyberScene from './CyberScene.svelte';
+  import { onMount } from 'svelte';
 
-  /**
-   * HACK SYSTEMOWY:
-   * Definiujemy konfigurację jako luźny obiekt, aby ominąć 
-   * niekompletne definicje typów w wersji beta Threlte.
-   * * Runtime (przeglądarka) to zrozumie i zastosuje przezroczystość,
-   * a TypeScript przestanie blokować builda.
-   */
-  const canvasOptions = {
-    toneMapping: THREE.NoToneMapping,
-    rendererParameters: {
-      alpha: true,                 // Kluczowe dla widoczności wideo
-      antialias: true,             // Kluczowe dla gładkich linii
-      powerPreference: "high-performance",
-      stencil: false,
-      depth: true
+  // Flaga do montowania komponentu (ciężka operacja)
+  let show3D = $state(false);
+  // Flaga do widoczności (lekka operacja CSS)
+  let isVisible = $state(false);
+
+  onMount(() => {
+    // 1. Sprawdzamy Mobile/Desktop
+    const isDesktop = window.matchMedia('(min-width: 768px)').matches;
+
+    if (isDesktop) {
+        // Zwiększamy delay do 1000ms. Niech strona najpierw stanie się w pełni interaktywna.
+        setTimeout(() => {
+            // Faza 1: Montujemy Canvas (procesor pracuje)
+            show3D = true;
+            
+            // Faza 2: Po krótkiej chwili włączamy opacity (GPU pracuje)
+            // requestAnimationFrame daje pewność, że Canvas już jest w DOM
+            requestAnimationFrame(() => {
+                setTimeout(() => {
+                    isVisible = true;
+                }, 100); 
+            });
+        }, 1000); 
     }
-  };
+  });
 </script>
 
-<div class="absolute inset-0 w-full h-full">
-  <Canvas {...canvasOptions}>
-    <CyberScene />
-  </Canvas>
-</div>
+{#if show3D}
+  <div 
+    class="w-full h-full absolute inset-0 transition-opacity duration-1000 ease-in-out"
+    class:opacity-0={!isVisible}
+    class:opacity-100={isVisible}
+  >
+    <Canvas>
+      <CyberScene />
+    </Canvas>
+  </div>
+{/if}
