@@ -10,9 +10,10 @@
 
   const isMobile = typeof window !== 'undefined' ? window.innerWidth < 768 : false;
 
-  // POPRAWKA TYPESCRIPT:
-  // Dodajemy "as [number, number]", żeby TS wiedział, że to zawsze para liczb, a nie losowa tablica.
-  const currentGridSize = (isMobile ? [40, 40] : [120, 120]) as [number, number];
+  // OPTYMALIZACJA DESKTOP:
+  // Zjazd z [120, 120] na [60, 60]. 
+  // Wizualnie różnica jest znikoma, a narzut na CPU przy starcie spada 4-krotnie.
+  const currentGridSize = (isMobile ? [30, 30] : [60, 60]) as [number, number];
 
   useTask((delta: number) => {
     if (isMobile) return;
