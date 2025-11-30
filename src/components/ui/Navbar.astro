@@ -1,39 +1,41 @@
 ---
 import Logo from './Logo.svelte';
+
+const navLinks = [
+  { name: 'O Mnie', href: '#about' },
+  { name: 'Projekty', href: '#projects' },
+  { name: 'Toolkit', href: '#toolkit' },
+];
 ---
 
-<nav class="fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b border-white/5 bg-void/90 backdrop-blur-xl h-28">
+<nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b border-white/5 bg-void/90 backdrop-blur-xl h-20 lg:h-28">
   
-  <div class="container mx-auto px-6 h-full flex justify-between items-center">
+  <div class="container mx-auto px-6 h-full flex justify-between items-center relative">
     
-    <a href="#" class="group flex items-center gap-5" aria-label="Home">
+    <a href="#" class="group flex items-center gap-3 lg:gap-5 relative z-50" aria-label="Home">
       
-      <div class="relative w-14 h-14 shrink-0">
+      <div class="relative w-10 h-10 lg:w-14 lg:h-14 shrink-0 transition-all duration-300">
          <div class="absolute inset-0 bg-lime/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-         <Logo class="text-white group-hover:text-lime transition-colors duration-300" />
+         <Logo class="text-white group-hover:text-lime transition-colors duration-300 w-full h-full" />
       </div>
       
       <div class="flex flex-col justify-center">
-        <span class="font-display font-bold text-2xl md:text-3xl leading-none text-white tracking-tight group-hover:text-lime transition-colors duration-300">
+        <span class="font-display font-bold text-lg lg:text-3xl leading-none text-white tracking-tight group-hover:text-lime transition-colors duration-300">
             KAMIL KOWALCZUK
         </span>
         
-        <span class="font-mono text-[10px] md:text-xs text-subtext uppercase tracking-[0.25em] group-hover:text-white transition-colors duration-300 mt-1.5">
+        <span class="font-mono text-[8px] lg:text-xs text-subtext uppercase tracking-[0.25em] group-hover:text-white transition-colors duration-300 mt-1 lg:mt-1.5">
             Growth Engineer
         </span>
       </div>
     </a>
 
-    <div class="hidden md:flex items-center gap-10">
-      <a href="#about" class="text-xs font-mono text-subtext hover:text-white hover:tracking-widest transition-all duration-300 uppercase">
-        O Mnie
-      </a>
-      <a href="#projects" class="text-xs font-mono text-subtext hover:text-white hover:tracking-widest transition-all duration-300 uppercase">
-        Projekty
-      </a>
-      <a href="#toolkit" class="text-xs font-mono text-subtext hover:text-white hover:tracking-widest transition-all duration-300 uppercase">
-        Toolkit
-      </a>
+    <div class="hidden lg:flex items-center gap-10">
+      {navLinks.map(link => (
+        <a href={link.href} class="text-xs font-mono text-subtext hover:text-white hover:tracking-widest transition-all duration-300 uppercase">
+          {link.name}
+        </a>
+      ))}
 
       <div class="w-px h-6 bg-white/10"></div>
 
@@ -45,9 +47,75 @@ import Logo from './Logo.svelte';
       </a>
     </div>
 
-    <button class="md:hidden text-white p-2 hover:text-lime transition-colors">
-        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    <button id="menu-toggle" class="lg:hidden text-white p-2 hover:text-lime transition-colors relative z-50 focus:outline-none" aria-label="Menu">
+        <svg id="icon-open" class="block transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+        <svg id="icon-close" class="hidden transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 18 18"/></svg>
     </button>
 
   </div>
+
+  <div id="mobile-menu" class="fixed inset-0 w-screen h-dvh bg-black z-40 flex flex-col items-center justify-center gap-8 translate-x-full transition-transform duration-500 ease-out lg:hidden will-change-transform">
+      
+      {navLinks.map((link, index) => (
+        <a 
+            href={link.href} 
+            class="mobile-link text-3xl font-display font-bold text-white hover:text-lime transition-colors opacity-0 translate-y-4"
+            style={`transition-delay: ${index * 100}ms`}
+        >
+          {link.name}
+        </a>
+      ))}
+
+      <a href="#contact" class="mobile-link mt-8 px-8 py-4 border border-lime text-lime font-mono text-sm uppercase tracking-widest opacity-0 translate-y-4" style="transition-delay: 300ms">
+        Start Project
+      </a>
+  </div>
+
 </nav>
+
+<script>
+  const menuToggle = document.getElementById('menu-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const iconOpen = document.getElementById('icon-open');
+  const iconClose = document.getElementById('icon-close');
+  const mobileLinks = document.querySelectorAll('.mobile-link');
+
+  let isMenuOpen = false;
+
+  if (menuToggle && mobileMenu && iconOpen && iconClose) {
+    menuToggle.addEventListener('click', () => {
+      isMenuOpen = !isMenuOpen;
+      
+      if (isMenuOpen) {
+        mobileMenu.classList.remove('translate-x-full');
+        document.body.style.overflow = 'hidden'; 
+        
+        iconOpen.classList.add('hidden');
+        iconClose.classList.remove('hidden');
+        iconClose.classList.add('rotate-90');
+        
+        mobileLinks.forEach(link => {
+            link.classList.remove('opacity-0', 'translate-y-4');
+        });
+
+      } else {
+        mobileMenu.classList.add('translate-x-full');
+        document.body.style.overflow = '';
+        
+        iconOpen.classList.remove('hidden');
+        iconClose.classList.add('hidden');
+        iconClose.classList.remove('rotate-90');
+
+        mobileLinks.forEach(link => {
+            link.classList.add('opacity-0', 'translate-y-4');
+        });
+      }
+    });
+
+    mobileLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if (isMenuOpen) menuToggle.click();
+        });
+    });
+  }
+</script>
