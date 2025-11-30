@@ -8,14 +8,14 @@
   const CELL_SIZE = 2;      
   const SECTION_SIZE = 20;  
 
+  // Bezpieczne sprawdzanie mobile
   const isMobile = typeof window !== 'undefined' ? window.innerWidth < 768 : false;
 
-  // OPTYMALIZACJA DESKTOP:
-  // Zjazd z [120, 120] na [60, 60]. 
-  // Wizualnie różnica jest znikoma, a narzut na CPU przy starcie spada 4-krotnie.
+  // Optymalizacja siatki (zachowujemy to, bo jest dobre)
   const currentGridSize = (isMobile ? [30, 30] : [60, 60]) as [number, number];
 
   useTask((delta: number) => {
+    // Na mobile nie liczymy pozycji (chociaż i tak komponent nie powinien być zamontowany przez SceneWrapper)
     if (isMobile) return;
     zPosition = (zPosition + delta * SPEED) % SECTION_SIZE;
   });
