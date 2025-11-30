@@ -1,0 +1,33 @@
+---
+import { getCollection } from 'astro:content';
+import Vault from '../svelte/Vault.svelte';
+
+// 1. Pobranie wszystkich projektów z kolekcji
+const allProjects = await getCollection('projects');
+
+// 2. Sortowanie (według frontmatter 'order')
+const sortedProjects = allProjects.sort((a: typeof allProjects[0], b: typeof allProjects[0]) => a.data.order - b.data.order);
+---
+
+<section id="projects" class="relative py-32 bg-void overflow-hidden">
+  
+  <div class="absolute inset-0 bg-cyber-grid opacity-20 pointer-events-none"></div>
+  
+  <div class="absolute top-0 left-0 w-full h-32 bg-linear-to-b from-void to-transparent z-10"></div>
+
+  <div class="container mx-auto px-6 relative z-20">
+    
+    <div class="mb-24 border-l-4 border-lime pl-6">
+      <h2 class="text-5xl md:text-7xl font-display font-bold text-white mb-4 uppercase">
+        The <span class="text-lime">Vault</span>.
+      </h2>
+      <p class="text-subtext font-mono text-sm md:text-base max-w-xl leading-relaxed">
+        [ ARCHIVE_ACCESS_GRANTED ] <br />
+        Wyselekcjonowane wdrożenia. Od skomplikowanej inżynierii danych po nagradzany design. Kliknij kartę, aby pobrać pełny raport.
+      </p>
+    </div>
+
+    <Vault client:visible projects={sortedProjects} />
+
+  </div>
+</section>

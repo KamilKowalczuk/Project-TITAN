@@ -1,0 +1,108 @@
+/* 1. Import Tailwind v4 */
+@import "tailwindcss"; /* [cite: 15] */
+
+/* 2. Import Fontów (Lokalnie) */
+@import "@fontsource/space-grotesk/700.css";
+@import "@fontsource/space-grotesk/500.css";
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/jetbrains-mono/400.css";
+
+/* 3. Definicja Design Systemu "TITAN" */
+@theme {
+  /* Kolory marki - mapujemy bezpośrednio na utility classes np. bg-void */
+  --color-void: #050505;      /* [cite: 1402] */
+  --color-surface: #1A1A1A;
+  --color-lime: #CCFF00;
+  --color-subtext: #888888;
+
+  /* Typografia - nadpisujemy domyślne fonty */
+  --font-display: "Space Grotesk", sans-serif; /* [cite: 1417] */
+  --font-sans: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  /* Efekty specjalne */
+  --shadow-neon: 0 0 20px rgba(204, 255, 0, 0.15);
+  --shadow-neon-strong: 0 0 30px rgba(204, 255, 0, 0.4);
+
+  /* Animacje - definiujemy keyframes i utility w jednym miejscu [cite: 1520] */
+  --animate-pulse-slow: pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+  @keyframes pulse-slow {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .5; }
+  }
+  @keyframes scanline {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 0% 100%; }
+  }
+}
+
+/* 4. Globalne style bazowe (nadal działają przez @layer base) */
+@layer base {
+  html {
+    /* Używamy zmiennych zdefiniowanych wyżej w @theme */
+    background-color: var(--color-void); 
+    color: white;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: #333 var(--color-void);
+  }
+
+  body {
+    @apply antialiased;
+    /* Używamy nowych utilities wygenerowanych przez zmienne --color-* */
+    @apply selection:bg-lime selection:text-void; 
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    letter-spacing: -0.025em;
+  }
+
+  code, pre {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+  }
+}
+
+/* 5. Własne Utilities (Shortcuts) */
+@layer utilities {
+  .flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .glass-panel {
+    /* W v4 opacity modifiers działają natywnie z color-mix */
+    background-color: color-mix(in srgb, var(--color-void), transparent 20%); /* [cite: 2108] */
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  
+  .text-terminal {
+    font-family: var(--font-mono);
+    color: var(--color-lime);
+  }
+  .bg-cyber-grid {
+    background-size: 40px 40px;
+    background-image: 
+      linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  }
+
+  /* 2. NOISE TEXTURE - Ziarno, żeby nie było "płasko" */
+  .bg-noise {
+    position: relative;
+  }
+  .bg-noise::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+    opacity: 0.07;
+    pointer-events: none;
+    z-index: 0;
+  }
+}

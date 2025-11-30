@@ -1,0 +1,64 @@
+---
+import Button from '../ui/Button.astro';
+import SceneWrapper from '../svelte/SceneWrapper.svelte';
+
+const ArrowIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>`;
+const DownloadIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>`;
+---
+
+<section class="relative h-screen w-full flex items-center justify-center overflow-hidden bg-black">
+  
+  <div class="absolute inset-0 z-0">
+    <video 
+      class="w-full h-full object-cover opacity-40 mix-blend-luminosity" 
+      autoplay 
+      muted 
+      loop 
+      playsinline
+    >
+      <source src="/video-files/wideo.mp4" type="video/mp4" />
+    </video>
+    
+    <div class="absolute inset-0 bg-linear-to-t from-void via-void/50 to-void/80"></div>
+  </div>
+
+  <div class="absolute inset-0 z-10 pointer-events-none mix-blend-screen">
+    <SceneWrapper client:only="svelte" />
+  </div>
+  
+  <div class="container mx-auto px-6 relative z-20 flex flex-col items-center text-center pt-20">
+    
+    <div class="mb-8 inline-flex items-center gap-3 px-3 py-1 border border-lime/30 bg-black/80 backdrop-blur-sm rounded-none skew-x-[-10deg]">
+        <span class="w-1.5 h-1.5 bg-lime animate-pulse skew-x-10deg"></span>
+        <span class="text-[10px] font-mono text-lime tracking-[0.2em] uppercase skew-x-10deg">
+            System_Operational
+        </span>
+    </div>
+
+    <h1 class="font-display font-bold text-5xl md:text-8xl lg:text-9xl text-white leading-[0.9] tracking-tighter mb-8 drop-shadow-2xl">
+      ARCHITECT OF <br />
+      <span class="text-transparent bg-clip-text bg-linear-to-b from-lime via-lime to-transparent opacity-90">
+        DIGITAL GROWTH
+      </span>
+    </h1>
+
+    <p class="font-sans text-lg md:text-2xl text-subtext font-light max-w-3xl mx-auto mb-12 border-l-2 border-lime/50 pl-6 text-left md:text-center md:border-none md:pl-0">
+      „W świecie, gdzie każdy jest programistą, ja jestem <span class="text-white font-medium">partnerem biznesowym, który koduje</span>.”
+    </p>
+
+    <div class="flex flex-col sm:flex-row gap-5 w-full sm:w-auto">
+      <Button href="#projects" variant="primary">
+        [ EKSPLORUJ PROJEKTY ]
+      </Button>
+      
+      <Button href="/cv.pdf" variant="outline" target="_blank">
+        <span class="flex items-center gap-2">
+            Pobierz CV <span class="text-[10px] opacity-50">PDF.SECURE</span>
+            <span set:html={DownloadIcon} />
+        </span>
+      </Button>
+    </div>
+
+  </div>
+
+</section>

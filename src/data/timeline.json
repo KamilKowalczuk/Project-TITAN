@@ -1,0 +1,37 @@
+[
+      {
+    "year": "2018 - 2019",
+    "title": "SPOT",
+    "role": "Door 2 door Sale Specialist & Team Leader",
+    "category": "sales",
+    "desc": "Sprzedaż bezpośrednia dla UNICEF, pozytkiwanie fundyszy dla fundacji. Oraz aktywne zarządzanie zespołem"
+  },
+  {
+    "year": "2020 - 2022",
+    "title": "Massith Ventures",
+    "role": "Founder & E-commerce Operator",
+    "category": "sales",
+    "desc": "Budowa i skalowanie sklepów dropshippingowych. Full-Stack Execution: połączenie technologii, marketingu i produkcji wideo. Osiągnięcie 60k PLN obrotu."
+  },
+  {
+    "year": "2022 - OBECNIE",
+    "title": "Top Medical",
+    "role": "IT Infrastructure Specialist",
+    "category": "tech",
+    "desc": "Utrzymanie ciągłości działania systemów medycznych i infrastruktury IT. Wdrażanie usprawnień w obsłudze pacjenta i cyberbezpieczeństwie danych."
+  },
+  {
+    "year": "2024 - OBECNIE",
+    "title": "Nobelion Sp. z o.o.",
+    "role": "CEO & E-commerce Strategist",
+    "category": "tech",
+    "desc": "Zarządzanie podmiotem gospodarczym. R&D w obszarze nowych technologii sprzedażowych, budowanie strategii wejścia na rynek i analiza trendów."
+  },
+  {
+    "year": "2024 - OBECNIE",
+    "title": "Independent Architect",
+    "role": "Full-Stack & Automation Consultant",
+    "category": "current",
+    "desc": "Kompleksowa realizacja projektów dla sektora medycznego. Tworzenie 'szytych na miarę' systemów automatyzacji (Python/Airtable) i rozwiązań Headless CMS."
+  }
+]

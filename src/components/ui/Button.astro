@@ -1,0 +1,25 @@
+---
+interface Props {
+  href: string;
+  variant?: 'primary' | 'outline';
+  class?: string;
+  target?: '_blank' | '_self';
+}
+
+const { href, variant = 'primary', class: className, target = '_self' } = Astro.props;
+
+const baseStyles = "group relative inline-flex items-center justify-center px-8 py-4 font-mono text-sm uppercase tracking-widest transition-all duration-300 ease-out overflow-hidden focus:outline-none focus:ring-2 focus:ring-lime/50 focus:ring-offset-2 focus:ring-offset-void";
+
+const variants = {
+  primary: "bg-lime text-void font-bold hover:bg-white hover:text-void hover:shadow-[0_0_30px_rgba(204,255,0,0.6)] border border-transparent",
+  outline: "bg-transparent text-white border border-white/20 hover:border-lime hover:text-lime hover:bg-lime/5"
+};
+---
+
+<a href={href} class:list={[baseStyles, variants[variant], className]} target={target}>
+  <span class="absolute top-0 right-0 w-2 h-2 border-t border-r border-current opacity-50 group-hover:opacity-100 transition-opacity"></span>
+  
+  <span class="relative z-10 flex items-center gap-3">
+    <slot />
+  </span>
+</a>

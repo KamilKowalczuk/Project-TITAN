@@ -1,0 +1,22 @@
+{
+  "frontend": {
+    "title": "FRONTEND_ARSENAL",
+    "desc": "Pixel-perfect implementation & performance.",
+    "stack": ["Astro 5.0", "Svelte 5", "Tailwind v4", "Three.js", "TypeScript", "Vite"]
+  },
+  "backend": {
+    "title": "BACKEND_&_DATA",
+    "desc": "Solid foundations & architecture.",
+    "stack": ["Python", "Node.js", "Strapi (Headless)", "PostgreSQL", "Linux / Bash", "Docker"]
+  },
+  "ai": {
+    "title": "AI_&_AUTOMATION",
+    "desc": "Business logic multiplier.",
+    "stack": ["Make.com", "OpenAI API", "Anthropic Claude", "RAG Systems", "n8n"]
+  },
+  "creative": {
+    "title": "CREATIVE_&_BIZ",
+    "desc": "From concept to revenue.",
+    "stack": ["DaVinci Resolve", "Figma / UI", "E-commerce Strategy", "Meta Ads", "Sales Psychology"]
+  }
+}
