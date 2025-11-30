@@ -9,33 +9,6 @@
 @import "@fontsource/jetbrains-mono/400.css";
 
 
-/* src/styles/global.css */
-
-/* CRITICAL PERFORMANCE FIX: Font Display Swap 
-   Wymuszamy na przeglądarce natychmiastowe pokazanie tekstu (fallback font),
-   zanim załadują się Twoje customowe fonty. To drastycznie poprawia FCP i LCP.
-*/
-
-@font-face {
-  font-family: 'Inter';
-  font-display: swap;
-  src: local('Inter'); /* Hack, aby nadpisać ustawienia z @fontsource */
-  font-weight: 100 900;
-}
-
-@font-face {
-  font-family: 'Space Grotesk';
-  font-display: swap;
-  src: local('Space Grotesk');
-  font-weight: 300 700;
-}
-
-@font-face {
-  font-family: 'JetBrains Mono';
-  font-display: swap;
-  src: local('JetBrains Mono');
-  font-weight: 400 700;
-}
 
 /* 3. Definicja Design Systemu "TITAN" */
 @theme {
