@@ -8,7 +8,14 @@
   const CELL_SIZE = 2;      
   const SECTION_SIZE = 20;  
 
+  const isMobile = typeof window !== 'undefined' ? window.innerWidth < 768 : false;
+
+  // POPRAWKA TYPESCRIPT:
+  // Dodajemy "as [number, number]", żeby TS wiedział, że to zawsze para liczb, a nie losowa tablica.
+  const currentGridSize = (isMobile ? [40, 40] : [120, 120]) as [number, number];
+
   useTask((delta: number) => {
+    if (isMobile) return;
     zPosition = (zPosition + delta * SPEED) % SECTION_SIZE;
   });
 </script>
@@ -18,15 +25,16 @@
   position={[0, 2, 12]}
   fov={80}
   oncreate={(ref: THREE.PerspectiveCamera) => {
-    ref.lookAt(0, -2, -30); // Patrz w dół, w otchłań
+    ref.lookAt(0, -2, -30);
   }}
 />
 
 <T.Fog args={['#000000', 1, 25]} />
 
-<T.Group position={[0, -4, 0]}> <Grid
+<T.Group position={[0, -4, 0]}> 
+  <Grid
     position.z={zPosition}
-    gridSize={[120, 120]}
+    gridSize={currentGridSize}
     cellSize={CELL_SIZE}
     sectionSize={SECTION_SIZE}
     cellColor="#0a1a0a"     

@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import Preloader from '../components/ui/Preloader.svelte'; // Importujemy komponent
+import Preloader from '../components/ui/Preloader.svelte';
 import Navbar from '../components/ui/Navbar.astro';
 
 interface Props {
@@ -20,11 +20,44 @@ const { title, description = "Kamil Kowalczuk - Full-Stack Growth Engineer." } =
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title} | Architect of Digital Growth</title>
+
+        <script is:inline>
+            // Sprawdzamy sesję NATYCHMIAST, zanim przeglądarka narysuje cokolwiek
+            // Jeśli klucz nie istnieje, dodajemy klasę 'loading', która wymusi czarny ekran
+            if (!sessionStorage.getItem('titan_preloader_seen')) {
+                document.documentElement.classList.add('is-loading');
+            }
+        </script>
+
+        <style is:global>
+            /* Domyślnie "Kurtyna" jest ukryta */
+            #instant-curtain {
+                display: none;
+            }
+
+            /* Jeśli mamy klasę 'is-loading', pokazujemy kurtynę */
+            html.is-loading #instant-curtain {
+                display: block;
+                position: fixed;
+                inset: 0;
+                background-color: #000000;
+                z-index: 9990; /* Tuż pod Preloaderem (9999), ale nad treścią */
+            }
+
+            /* Opcjonalnie blokujemy scrollowanie na poziomie CSS */
+            html.is-loading body {
+                overflow: hidden;
+            }
+        </style>
 	</head>
 	<body class="relative bg-void text-white selection:bg-lime selection:text-void">
         
+        <div id="instant-curtain"></div>
+
         <Preloader client:load />
+        
         <Navbar />
+        
         <div class="fixed inset-0 z-[-1] bg-[linear-gradient(to_right,#1a1a1a_1px,transparent_1px),linear-gradient(to_bottom,#1a1a1a_1px,transparent_1px)] bg-size-[4rem_4rem] mask-[radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-20 pointer-events-none"></div>
 
 		<main>

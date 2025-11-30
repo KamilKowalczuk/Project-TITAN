@@ -3,8 +3,7 @@
   import { fade } from 'svelte/transition';
   import Logo from './Logo.svelte';
 
-  // State
-  let isVisible = $state(true);
+  let isVisible = $state(true); // Domyślnie true, ale logika poniżej zdecyduje
   let currentText = $state('>_ SYSTEM_INIT');
   let progress = $state(0);
   let showContent = $state(false);
@@ -16,30 +15,40 @@
   ];
 
   onMount(() => {
-    // 1. SPRAWDZENIE SESJI: Jeśli użytkownik już tu był, nie pokazuj preloadera
+    // 1. ODBIÓR PAŁECZKI: Sprawdzamy czy mamy "kurtynę" z MainLayout
     const hasSeenPreloader = sessionStorage.getItem('titan_preloader_seen');
 
     if (hasSeenPreloader) {
+      // Jeśli użytkownik już był, wyłączamy wszystko natychmiast
       isVisible = false;
+      // Upewniamy się, że klasa loading jest usunięta (failsafe)
+      document.documentElement.classList.remove('is-loading');
       return; 
     }
 
-    // 2. BLOKADA SCROLLA (tylko jeśli pokazujemy preloader)
-    document.body.style.overflow = 'hidden';
+    // Jeśli tu jesteśmy, to znaczy, że to pierwsze wejście.
+    // Svelte się załadował, więc możemy pokazać naszą animowaną treść.
     showContent = true;
+    
+    // WAŻNE: W tym momencie na ekranie jest #instant-curtain (czarny) ORAZ ten komponent (też ma czarne tło).
+    // Możemy bezpiecznie pozwolić animacji trwać.
 
-    // 3. LOGIKA SZYBKIEGO ŁADOWANIA
-    // Symulujemy szybki load, ale płynny
+    // 2. LOGIKA ANIMACJI
     setTimeout(() => { progress = 30; currentText = messages[0]; }, 100);
     setTimeout(() => { progress = 70; currentText = messages[1]; }, 600);
     setTimeout(() => { progress = 100; currentText = messages[2]; }, 1000);
 
-    // 4. KONIEC
+    // 3. FINAŁ
     setTimeout(() => {
       isVisible = false;
-      document.body.style.overflow = ''; // Przywróć scroll
-      sessionStorage.setItem('titan_preloader_seen', 'true'); // Zapisz w sesji
-    }, 1400); // Całość trwa 1.4s zamiast 2.5s
+      
+      // Zdejmujemy blokady systemowe
+      document.documentElement.classList.remove('is-loading'); 
+      document.body.style.overflow = ''; 
+      
+      // Zapisujemy flagę
+      sessionStorage.setItem('titan_preloader_seen', 'true'); 
+    }, 1400);
   });
 </script>
 
@@ -55,7 +64,6 @@
             <Logo class="w-full h-full text-white" />
         </div>
       </div>
-      
       <div class="absolute inset-0 bg-lime/10 blur-3xl rounded-full animate-pulse pointer-events-none"></div>
     </div>
 
