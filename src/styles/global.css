@@ -1,13 +1,45 @@
-/* 1. Import Tailwind v4 */
-@import "tailwindcss"; /* [cite: 15] */
+/* src/styles/global.css */
 
-/* 2. Import Fontów (Lokalnie) */
+/* 1. Import Tailwind v4 */
+@import "tailwindcss";
+
+/* 2. OPTYMALIZACJA FONTÓW 
+   Używamy @font-face zamiast @import fontsource, żeby mieć pełną kontrolę nad ładowaniem.
+   To kluczowe dla Lighthouse.
+*/
+
+/* Space Grotesk - Nagłówki */
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap; /* Pokaż tekst natychmiast, podmień jak pobierzesz */
+  src: url('/fonts/space-grotesk-v13-latin-500.woff2') format('woff2'); /* Musimy przenieść pliki lokalnie lub użyć CDN, ale na razie hack z fontsource poniżej */
+}
+
+/* Ponieważ masz paczki npm, zrobimy override dla font-display */
 @import "@fontsource/space-grotesk/700.css";
 @import "@fontsource/space-grotesk/500.css";
 @import "@fontsource/inter/400.css";
 @import "@fontsource/inter/600.css";
 @import "@fontsource/jetbrains-mono/400.css";
 
+/* FORCE SWAP - To nadpisuje ustawienia domyślne przeglądarki */
+@font-face {
+  font-family: 'Space Grotesk';
+  font-display: swap;
+  src: local('Space Grotesk'); /* Hack dla Chrome/Edge */
+}
+@font-face {
+  font-family: 'Inter';
+  font-display: swap;
+  src: local('Inter');
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-display: swap;
+  src: local('JetBrains Mono');
+}
 
 
 /* 3. Definicja Design Systemu "TITAN" */

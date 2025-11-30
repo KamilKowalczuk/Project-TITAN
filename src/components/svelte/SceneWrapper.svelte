@@ -1,29 +1,25 @@
-<script lang="ts">
-  import * as THREE from 'three';
-  import { Canvas } from '@threlte/core';
-  import CyberScene from './CyberScene.svelte';
+<script>
+  import { onMount } from 'svelte';
+  import { fade } from 'svelte/transition';
+  
+  // Dynamiczny import komponentu CyberScene - Code Splitting
+  // Astro nie załaduje kodu Three.js dopóki go nie potrzebujemy
+  let SceneComponent = $state(null);
+  let isMounted = $state(false);
 
-  /**
-   * HACK SYSTEMOWY:
-   * Definiujemy konfigurację jako luźny obiekt, aby ominąć 
-   * niekompletne definicje typów w wersji beta Threlte.
-   * * Runtime (przeglądarka) to zrozumie i zastosuje przezroczystość,
-   * a TypeScript przestanie blokować builda.
-   */
-  const canvasOptions = {
-    toneMapping: THREE.NoToneMapping,
-    rendererParameters: {
-      alpha: true,                 // Kluczowe dla widoczności wideo
-      antialias: true,             // Kluczowe dla gładkich linii
-      powerPreference: "high-performance",
-      stencil: false,
-      depth: true
-    }
-  };
+  onMount(() => {
+    // Opóźniamy start 3D o 1.5 sekundy po załadowaniu strony
+    // To daje procesorowi czas na obsłużenie wideo i animacji CSS
+    setTimeout(async () => {
+        const module = await import('./CyberScene.svelte'); // Dynamic import
+        SceneComponent = module.default;
+        isMounted = true;
+    }, 1500);
+  });
 </script>
 
-<div class="absolute inset-0 w-full h-full">
-  <Canvas {...canvasOptions}>
-    <CyberScene />
-  </Canvas>
+<div class="w-full h-full absolute inset-0 transition-opacity duration-1000 {isMounted ? 'opacity-100' : 'opacity-0'}">
+    {#if SceneComponent}
+        <SceneComponent />
+    {/if}
 </div>
