@@ -1,8 +1,7 @@
 ---
 import Button from '../ui/Button.astro';
-import SceneWrapper from '../svelte/SceneWrapper.svelte';
+import CyberGrid from '../ui/CyberGrid.astro'; // Importujemy nowy CSS Grid
 
-// SVG Icons
 const ArrowIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>`;
 const DownloadIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>`;
 ---
@@ -12,23 +11,23 @@ const DownloadIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height=
   <div class="absolute inset-0 z-0">
     <video 
       id="hero-video"
-      class="w-full h-full object-cover opacity-40 mix-blend-luminosity transition-opacity duration-1000" 
+      class="w-full h-full object-cover opacity-50 mix-blend-luminosity" 
       muted 
       loop 
       playsinline
-      poster="/video-files/poster-frame.webp" 
+      poster="/video-files/poster-frame.webp"
       preload="none"
     >
       <source src="/video-files/wideo.mp4" type="video/mp4" />
     </video>
-    
-    <div class="absolute inset-0 bg-linear-to-t from-void via-void/50 to-void/80"></div>
   </div>
 
-<div class="absolute inset-0 z-10 pointer-events-none mix-blend-screen hidden md:block">
-   <SceneWrapper client:only="svelte" />
+<div class="absolute inset-0 z-10 pointer-events-none mix-blend-screen opacity-100"> <CyberGrid />
 </div>
-  
+
+  <div class="absolute inset-0 z-15 pointer-events-none bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.4)_50%,#000_100%)]"></div>
+  <div class="absolute inset-0 z-15 pointer-events-none bg-linear-to-t from-void via-transparent to-void/80"></div>
+
   <div class="container mx-auto px-6 relative z-20 flex flex-col items-center text-center pt-20">
     
     <div class="mb-8 inline-flex items-center gap-3 px-3 py-1 border border-lime/30 bg-black/80 backdrop-blur-sm rounded-none skew-x-[-10deg]">
@@ -67,25 +66,21 @@ const DownloadIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height=
 </section>
 
 <script>
-  // SMART LOADING LOGIC
-  // Uruchamiamy wideo tylko wtedy, gdy przeglądarka "odpoczywa" (idle).
-  // Dzięki temu First Contentful Paint (FCP) i Interaction to Next Paint (INP) są nienaruszone.
-  
+  // SMART VIDEO LOADING
+  // Wideo odpala się tylko na Desktopie i tylko gdy przeglądarka odpocznie.
   const initVideo = () => {
+    // Mobile check - oszczędzamy dane userów mobilnych
+    if (window.matchMedia("(max-width: 768px)").matches) return;
+
     const video = document.getElementById('hero-video') as HTMLVideoElement;
     if (video) {
-      video.play().catch(() => {
-        // Autoplay policy fallback (rzadkie przypadki)
-        console.log('Autoplay blocked - user interaction required');
-      });
+      video.play().catch(() => console.log('Autoplay prevented'));
     }
   };
 
   if ('requestIdleCallback' in window) {
-    // Czekaj na ciszę w procesorze, ale nie dłużej niż 3 sekundy
-    requestIdleCallback(() => initVideo(), { timeout: 3000 });
+    (window as any).requestIdleCallback(initVideo, { timeout: 4000 });
   } else {
-    // Fallback dla Safari
-    setTimeout(initVideo, 500);
+    setTimeout(initVideo, 1500);
   }
 </script>
