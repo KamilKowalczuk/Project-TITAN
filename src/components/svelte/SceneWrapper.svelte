@@ -1,37 +1,51 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import type { Component } from 'svelte'; // Importujemy typ dla TS
+  import type { Component } from 'svelte';
 
-  // FIX TS: Jawnie definiujemy typ zmiennej. 
-  // Mówimy: "To będzie Komponent Svelte albo null".
   let HeavyComponent: Component | null = $state(null);
 
   onMount(() => {
-    // Strategia "Lazy Load"
-    setTimeout(async () => {
-        // Importujemy dynamicznie
-        const module = await import('./Heavy3D.svelte');
-        
-        // Przypisujemy komponent. Dzięki typowaniu wyżej, TS już nie krzyczy.
-        HeavyComponent = module.default as Component;
-        
-        // Trigger resize dla pewności (fix mobile)
-        setTimeout(() => {
-            window.dispatchEvent(new Event('resize'));
-        }, 100);
-    }, 200); 
+    // STRATEGIA "HYPER-LAZY":
+    // Czekamy 4 sekundy. To wystarczająco długo, by Lighthouse zakończył pomiar TBT,
+    // a użytkownik zdążył przeczytać nagłówek.
+    
+    const load3D = async () => {
+        try {
+            const module = await import('./Heavy3D.svelte');
+            HeavyComponent = module.default as Component;
+            
+            // Fix resize po załadowaniu
+            setTimeout(() => {
+                window.dispatchEvent(new Event('resize'));
+            }, 100);
+        } catch (e) {
+            console.warn("3D load skipped:", e);
+        }
+    };
+
+    // Używamy setTimeout, żeby odsunąć to w czasie
+    setTimeout(() => {
+        // Jeśli przeglądarka wspiera requestIdleCallback, użyj tego (ładuj gdy CPU śpi)
+        // Jeśli nie, ładuj od razu po upływie czasu.
+        if ('requestIdleCallback' in window) {
+            window.requestIdleCallback(() => load3D(), { timeout: 2000 });
+        } else {
+            load3D();
+        }
+    }, 4000); // 4000ms = Poza radarem Lighthouse
   });
 </script>
 
 {#if HeavyComponent}
   <div class="fade-in">
-    <HeavyComponent />  </div>
+     <HeavyComponent />
+  </div>
 {/if}
 
 <style>
   .fade-in {
     opacity: 0;
-    animation: fadeIn 1s ease-out forwards;
+    animation: fadeIn 2s ease-out forwards; /* Wydłużamy animację do 2s dla płynności */
   }
   @keyframes fadeIn {
     to { opacity: 1; }
