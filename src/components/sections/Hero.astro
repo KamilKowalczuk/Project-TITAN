@@ -15,8 +15,8 @@ const DownloadIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height=
       muted 
       loop 
       playsinline
-      poster="/video-files/poster-frame.avif"
-      preload="none"
+      poster="/video-files/poster-frame.webp"
+      preload="metadata" 
     >
       <source src="/video-files/video-mobile.mp4" type="video/mp4" media="(max-width: 767px)" />
       <source src="/video-files/video-desktop.mp4" type="video/mp4" />
@@ -68,29 +68,29 @@ const DownloadIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height=
 </section>
 
 <script>
-  // SMART LOADING + FIREFOX FIX
-  
   const initVideo = () => {
     const video = document.getElementById('hero-video') as HTMLVideoElement;
     if (!video) return;
 
-    // FIREFOX MOBILE FIX:
-    // Jeśli wideo ma preload="none", niektóre przeglądarki (zwłaszcza Firefox na Androidzie)
-    // nie zaczną odtwarzać po samym .play(). Musimy wymusić załadowanie metadanych.
+    // Prosta, brutalna siła dla Firefoxa
+    // Jeśli status jest 'HAVE_NOTHING' (0), wymuszamy load()
     if (video.readyState === 0) {
         video.load();
     }
-
-    video.play().catch((err) => {
-        // Cicha obsługa błędu autoplay (np. tryb oszczędzania baterii)
-        console.log('Autoplay prevented:', err);
-    });
+    
+    const playPromise = video.play();
+    if (playPromise !== undefined) {
+        playPromise.catch((error) => {
+            console.log("Auto-play prevented (Low Power Mode?):", error);
+        });
+    }
   };
 
-  // Używamy requestIdleCallback dla wydajności, ale z fallbackiem
-  if ('requestIdleCallback' in window) {
-    (window as any).requestIdleCallback(initVideo, { timeout: 4000 });
+  // Uruchamiamy szybciej (100ms), nie ma co czekać 4s, jeśli mamy lekki plik
+  // Browser sam zdecyduje czy ma zasoby
+  if (document.readyState === 'complete') {
+    initVideo();
   } else {
-    setTimeout(initVideo, 1500);
+    window.addEventListener('load', initVideo);
   }
 </script>

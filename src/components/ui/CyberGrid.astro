@@ -1,11 +1,13 @@
 ---
-// CyberGrid.astro - Wersja: "Perfect Center Immersion"
+// CyberGrid.astro - Wersja: "Laser Precision & Firefox Performance"
 ---
 
 <div class="cyber-scene">
   <div class="grid-wrapper">
     <div class="grid-texture"></div>
   </div>
+  
+  <div class="center-line"></div>
   
   <div class="horizon-dof"></div>
 </div>
@@ -21,6 +23,7 @@
     pointer-events: none;
     background: transparent;
 
+    /* Maska horyzontu */
     mask-image: linear-gradient(to bottom, 
       transparent 0%, 
       transparent 50%, 
@@ -35,6 +38,23 @@
     );
   }
 
+  /* NOWOŚĆ: Linia Centralna (Celownik) */
+  .center-line {
+    position: absolute;
+    top: 0;
+    left: 50%; /* Idealny środek */
+    width: 2px; /* Grubość linii Major */
+    height: 100%;
+    background: rgba(204, 255, 0, 0.6); /* Limonka, nieco jaśniejsza */
+    transform: translateX(-50%) rotateX(80deg); /* Musi mieć to samo pochylenie co podłoga! */
+    transform-origin: bottom center; /* Pochylamy od dołu, żeby "celowała" w horyzont */
+    z-index: 5;
+    
+    /* Subtelne zanikanie ku górze */
+    mask-image: linear-gradient(to top, black 40%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to top, black 40%, transparent 100%);
+  }
+
   .horizon-dof {
     position: absolute;
     top: 0;
@@ -42,8 +62,11 @@
     width: 100%;
     height: 60%;
     z-index: 10;
+    
+    /* DEFAULT DESKTOP: Blur jest OK */
     backdrop-filter: blur(3px);
     -webkit-backdrop-filter: blur(3px);
+    
     mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
     -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
   }
@@ -65,21 +88,18 @@
     width: 300%;
     height: 300%;
     
-    /* DEFAULT DESKTOP GRADIENTS */
+    /* Na Desktopie usuwamy centralną linię z tła, bo mamy .center-line */
     background-image: 
-      /* MAJOR (Limonka) */
-      linear-gradient(90deg, rgba(204, 255, 0, 0.5) 2px, transparent 2px),
+      /* Tylko poziome Major */
       linear-gradient(180deg, rgba(204, 255, 0, 0.5) 2px, transparent 2px),
-
-      /* MINOR (Białe) */
+      /* Major Pionowe - Przesunięte tak, żeby nie dublowały środka, albo po prostu zostawiamy */
+      linear-gradient(90deg, rgba(204, 255, 0, 0.5) 2px, transparent 2px),
+      /* Minor */
       linear-gradient(90deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px),
       linear-gradient(180deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
 
-    background-size: 
-      200px 200px, 
-      200px 200px, 
-      40px 40px, 
-      40px 40px;
+    background-size: 200px 200px, 200px 200px, 40px 40px, 40px 40px;
+    background-position: center top; /* Ważne centrowanie */
 
     animation: grid-fly 6s linear infinite;
     will-change: transform;
@@ -93,10 +113,25 @@
 
   /* --- MOBILE OPTIMIZATION --- */
   @media (max-width: 768px) {
+    /* FIX LAG: Wyłączamy blur na mobile. To naprawi zacinanie na Firefoxie. */
+    .horizon-dof {
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      /* Zamiast blura, dajemy lekkie przyciemnienie, żeby ukryć aliasing */
+      background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, transparent 100%);
+    }
+
     .cyber-scene {
       perspective: 250px; 
       mask-image: linear-gradient(to bottom, transparent 0%, transparent 40%, black 80%, black 100%);
       -webkit-mask-image: linear-gradient(to bottom, transparent 0%, transparent 40%, black 80%, black 100%);
+    }
+    
+    /* Dostosowanie celownika na mobile */
+    .center-line {
+        transform: translateX(-50%) rotateX(75deg); /* Zgodne z grid-wrapper mobile */
+        width: 3px; /* Nieco grubsza na małym ekranie dla lepszej widoczności */
+        background: rgba(204, 255, 0, 0.8);
     }
 
     .grid-wrapper {
@@ -104,28 +139,21 @@
     }
 
     .grid-texture {
-      /* ZMIANA KLUCZOWA DLA IMERSJI */
-      /* Nadpisujemy background-image TYLKO dla mobile.
-         Pierwszy gradient (Pionowe linie Major) ma teraz linię wycentrowaną wewnątrz kafelka.
-         Dzięki temu, przy background-position: center, linia wypada idealnie na środku ekranu.
-      */
+      /* Na mobile czyścimy pionowe linie Major z tła, bo mamy .center-line */
       background-image: 
-        /* 1. MAJOR VERTICAL (CENTERED) - To jest ta linia prowadząca */
-        linear-gradient(90deg, transparent calc(50% - 1px), rgba(204, 255, 0, 0.5) 2px, transparent calc(50% + 1px)),
-        
-        /* 2. MAJOR HORIZONTAL - Bez zmian */
+        /* Major Horizontal */
         linear-gradient(180deg, rgba(204, 255, 0, 0.5) 2px, transparent 2px),
-
-        /* 3. MINOR VERTICAL */
+        /* Minor Vertical */
         linear-gradient(90deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px),
-        /* 4. MINOR HORIZONTAL */
+        /* Minor Horizontal */
         linear-gradient(180deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+        
+      /* Uwaga: Usunąłem Major Vertical z tła, żeby nie "gryzła się" z celownikiem */
 
       background-size: 
-        100px 100px, 
-        100px 100px,  
-        20px 20px, 
-        20px 20px;     
+        100px 100px, /* Major Horiz */
+        20px 20px,   /* Minor Vert */
+        20px 20px;   /* Minor Horiz */
         
       animation: grid-fly-mobile 6s linear infinite;
     }
