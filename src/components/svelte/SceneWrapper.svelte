@@ -1,24 +1,39 @@
 <script lang="ts">
-  import { Canvas } from '@threlte/core';
-  import CyberScene from './CyberScene.svelte';
   import { onMount } from 'svelte';
+  import type { Component } from 'svelte'; // Importujemy typ dla TS
 
-  // State: Domyślnie false.
-  let shouldRender = $state(false);
+  // FIX TS: Jawnie definiujemy typ zmiennej. 
+  // Mówimy: "To będzie Komponent Svelte albo null".
+  let HeavyComponent: Component | null = $state(null);
 
   onMount(() => {
-    // Proste sprawdzenie. Żadnych timeoutów, żadnych tricków.
-    // Jeśli przeglądarka ma > 768px, renderujemy.
-    if (window.matchMedia('(min-width: 768px)').matches) {
-        shouldRender = true;
-    }
+    // Strategia "Lazy Load"
+    setTimeout(async () => {
+        // Importujemy dynamicznie
+        const module = await import('./Heavy3D.svelte');
+        
+        // Przypisujemy komponent. Dzięki typowaniu wyżej, TS już nie krzyczy.
+        HeavyComponent = module.default as Component;
+        
+        // Trigger resize dla pewności (fix mobile)
+        setTimeout(() => {
+            window.dispatchEvent(new Event('resize'));
+        }, 100);
+    }, 200); 
   });
 </script>
 
-{#if shouldRender}
-  <div class="absolute inset-0 w-full h-full" style="pointer-events: none;">
-    <Canvas>
-      <CyberScene />
-    </Canvas>
-  </div>
+{#if HeavyComponent}
+  <div class="fade-in">
+    <HeavyComponent />  </div>
 {/if}
+
+<style>
+  .fade-in {
+    opacity: 0;
+    animation: fadeIn 1s ease-out forwards;
+  }
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+</style>
