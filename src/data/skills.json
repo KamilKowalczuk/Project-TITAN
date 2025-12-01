@@ -1,22 +1,22 @@
 {
   "frontend": {
     "title": "FRONTEND_ARSENAL",
-    "desc": "Pixel-perfect implementation & performance.",
-    "stack": ["Astro 5.0", "Svelte 5", "Tailwind v4", "Three.js", "TypeScript", "Vite"]
+    "desc": "High-performance interfaces & 3D interaction.",
+    "stack": ["Astro 5.0", "Svelte 5", "Tailwind CSS", "Three.js", "TypeScript", "Motion / Animations"]
   },
   "backend": {
-    "title": "BACKEND_&_DATA",
-    "desc": "Solid foundations & architecture.",
-    "stack": ["Python", "Node.js", "Strapi (Headless)", "PostgreSQL", "Linux / Bash", "Docker"]
+    "title": "DATA_&_LOGIC",
+    "desc": "Scalable architecture & system engineering.",
+    "stack": ["Python", "Strapi (Headless)", "Airtable Scripting", "Linux (Arch/Bash)", "REST API Integrations", "Netlify / Render"]
   },
   "ai": {
     "title": "AI_&_AUTOMATION",
-    "desc": "Business logic multiplier.",
-    "stack": ["Make.com", "OpenAI API", "Anthropic Claude", "RAG Systems", "n8n"]
+    "desc": "Autonomous agents & workflow orchestration.",
+    "stack": ["Make.com (Advanced)", "Gemini / OpenAI API", "AI-Augmented Dev", "Prompt Engineering", "Agentic Workflows"]
   },
   "creative": {
-    "title": "CREATIVE_&_BIZ",
-    "desc": "From concept to revenue.",
-    "stack": ["DaVinci Resolve", "Figma / UI", "E-commerce Strategy", "Meta Ads", "Sales Psychology"]
+    "title": "GROWTH_&_BIZ",
+    "desc": "Market strategy & conversion engineering.",
+    "stack": ["DaVinci Resolve", "UI / Visual Design", "Sales Psychology", "E-commerce Strategy", "Analytics (GA4/GTM)"]
   }
 }
