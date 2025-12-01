@@ -1,25 +1,26 @@
 import { defineConfig } from 'astro/config';
 import svelte from '@astrojs/svelte';
-import tailwindcss from '@tailwindcss/vite'; //
+import tailwindcss from '@tailwindcss/vite';
 import mdx from '@astrojs/mdx';
 
 export default defineConfig({
   integrations: [svelte(), mdx()],
   vite: {
     plugins: [
-      tailwindcss(), //
+      tailwindcss(),
     ],
-    // FIX DLA PRODUKCJI:
     resolve: {
+      // To zostawiamy, bo naprawia błędy Three.js "instanceof"
       dedupe: ['three', '@threlte/core', '@threlte/extras']
     },
     optimizeDeps: {
+      // To zostawiamy, bo naprawia "biały ekran" na mobile
       include: ['three', '@threlte/core', '@threlte/extras', '@threlte/extras > three']
     },
     build: {
-      // ZMIANA: 'esnext' -> 'es2020'
-      // To naprawia błąd "Cannot use import.meta outside a module"
-      target: 'es2020',
+      // ZMIANA: Usuwamy 'target'. 
+      // Pozwalamy Astro/Vite użyć domyślnych ustawień ('modules'), 
+      // co naprawia błąd "import.meta outside a module".
       cssCodeSplit: true,
       chunkSizeWarningLimit: 2000,
     }
