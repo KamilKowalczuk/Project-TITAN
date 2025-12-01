@@ -15,7 +15,7 @@ const DownloadIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height=
       muted 
       loop 
       playsinline
-      poster="/video-files/poster-frame.webp"
+      poster="/video-files/poster-frame.avif"
       preload="none"
     >
       <source src="/video-files/video-mobile.mp4" type="video/mp4" media="(max-width: 767px)" />
@@ -68,17 +68,26 @@ const DownloadIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height=
 </section>
 
 <script>
-  // SMART LOADING: Usunęliśmy blokadę mobile!
-  // Teraz wideo ładuje się wszędzie, ale inteligentnie (po załadowaniu strony).
+  // SMART LOADING + FIREFOX FIX
   
   const initVideo = () => {
     const video = document.getElementById('hero-video') as HTMLVideoElement;
-    if (video) {
-      // Force play dla mobile (często wymagane user interaction, ale z muted powinno ruszyć)
-      video.play().catch((err) => console.log('Autoplay prevented:', err));
+    if (!video) return;
+
+    // FIREFOX MOBILE FIX:
+    // Jeśli wideo ma preload="none", niektóre przeglądarki (zwłaszcza Firefox na Androidzie)
+    // nie zaczną odtwarzać po samym .play(). Musimy wymusić załadowanie metadanych.
+    if (video.readyState === 0) {
+        video.load();
     }
+
+    video.play().catch((err) => {
+        // Cicha obsługa błędu autoplay (np. tryb oszczędzania baterii)
+        console.log('Autoplay prevented:', err);
+    });
   };
 
+  // Używamy requestIdleCallback dla wydajności, ale z fallbackiem
   if ('requestIdleCallback' in window) {
     (window as any).requestIdleCallback(initVideo, { timeout: 4000 });
   } else {

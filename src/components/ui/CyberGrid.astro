@@ -1,5 +1,5 @@
 ---
-// CyberGrid.astro - Wersja Cinematic Depth of Field
+// CyberGrid.astro - Wersja: "Perfect Center Immersion"
 ---
 
 <div class="cyber-scene">
@@ -21,10 +21,6 @@
     pointer-events: none;
     background: transparent;
 
-    /* ZMIANA 1: Agresywniejsza maska widoczności.
-       Przesunąłem start widoczności z 30% na 50%.
-       Ukrywamy "brzydki" koniec siatki całkowicie.
-    */
     mask-image: linear-gradient(to bottom, 
       transparent 0%, 
       transparent 50%, 
@@ -39,22 +35,15 @@
     );
   }
 
-  /* NOWOŚĆ: Styl dla Głębi Ostrości */
   .horizon-dof {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 60%; /* Zajmuje górne 60% ekranu */
+    height: 60%;
     z-index: 10;
-    
-    /* MAGIA: Rozmywamy wszystko, co jest pod spodem (siatkę i wideo) */
-    /* 3px to wystarczająco, żeby zabić migotanie */
     backdrop-filter: blur(3px);
     -webkit-backdrop-filter: blur(3px);
-
-    /* Maska gradientowa dla samego blura */
-    /* Góra jest mocno rozmyta (black), dół jest ostry (transparent) */
     mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
     -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
   }
@@ -76,7 +65,7 @@
     width: 300%;
     height: 300%;
     
-    /* Linie: Ostre, wyraziste kolory */
+    /* DEFAULT DESKTOP GRADIENTS */
     background-image: 
       /* MAJOR (Limonka) */
       linear-gradient(90deg, rgba(204, 255, 0, 0.5) 2px, transparent 2px),
@@ -92,52 +81,56 @@
       40px 40px, 
       40px 40px;
 
-    /* Powolny, dostojny lot (6s) */
     animation: grid-fly 6s linear infinite;
-    
     will-change: transform;
     backface-visibility: hidden;
   }
 
   @keyframes grid-fly {
-    0% {
-      transform: translateY(0);
-    }
-    100% {
-      transform: translateY(200px);
-    }
+    0% { transform: translateY(0); }
+    100% { transform: translateY(200px); }
   }
 
-   
-/* --- MOBILE OPTIMIZATION --- */
+  /* --- MOBILE OPTIMIZATION --- */
   @media (max-width: 768px) {
     .cyber-scene {
-      /* Zmniejszamy perspektywę na mobile - to "przybliża" podłogę i zwiększa dynamikę */
       perspective: 250px; 
-      
-      /* Maska musi zaczynać się niżej na małym ekranie */
       mask-image: linear-gradient(to bottom, transparent 0%, transparent 40%, black 80%, black 100%);
       -webkit-mask-image: linear-gradient(to bottom, transparent 0%, transparent 40%, black 80%, black 100%);
     }
 
     .grid-wrapper {
-        /* Bardziej agresywne pochylenie na mobile */
         transform: rotateX(75deg);
     }
 
     .grid-texture {
-      /* Zmieniamy rozmiar kratki na mobile! */
-      /* Kratka musi być gęstsza, żeby na wąskim ekranie było widać więcej linii */
-      background-size: 
-        100px 100px, 100px 100px,  /* Major: mniejszy (100px) */
-        20px 20px, 20px 20px;      /* Minor: mniejszy (20px) */
+      /* ZMIANA KLUCZOWA DLA IMERSJI */
+      /* Nadpisujemy background-image TYLKO dla mobile.
+         Pierwszy gradient (Pionowe linie Major) ma teraz linię wycentrowaną wewnątrz kafelka.
+         Dzięki temu, przy background-position: center, linia wypada idealnie na środku ekranu.
+      */
+      background-image: 
+        /* 1. MAJOR VERTICAL (CENTERED) - To jest ta linia prowadząca */
+        linear-gradient(90deg, transparent calc(50% - 1px), rgba(204, 255, 0, 0.5) 2px, transparent calc(50% + 1px)),
         
-      /* Skoro kratka jest mniejsza (100px), animacja też musi być krótsza */
+        /* 2. MAJOR HORIZONTAL - Bez zmian */
+        linear-gradient(180deg, rgba(204, 255, 0, 0.5) 2px, transparent 2px),
+
+        /* 3. MINOR VERTICAL */
+        linear-gradient(90deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px),
+        /* 4. MINOR HORIZONTAL */
+        linear-gradient(180deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+
+      background-size: 
+        100px 100px, 
+        100px 100px,  
+        20px 20px, 
+        20px 20px;     
+        
       animation: grid-fly-mobile 6s linear infinite;
     }
   }
 
-  /* Osobna klatka kluczowa dla mobile, bo przesunięcie to teraz 100px a nie 200px */
   @keyframes grid-fly-mobile {
     0% { transform: translateY(0); }
     100% { transform: translateY(100px); }
