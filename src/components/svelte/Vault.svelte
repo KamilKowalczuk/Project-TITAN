@@ -1,6 +1,6 @@
 <script lang="ts">
   import { fade } from 'svelte/transition';
-  import { flip } from 'svelte/animate'; // Dodajemy animację sortowania
+  import { flip } from 'svelte/animate'; 
 
   // 1. Dane wejściowe
   let { projects = [] } = $props();
@@ -43,7 +43,7 @@
         
         {cluster.label}
         
-        <span class="absolute bottom-0 left-0 w-0 h-[1px] bg-lime transition-all duration-300 group-hover:w-full opacity-50"></span>
+        <span class="absolute bottom-0 left-0 w-0 h-1px bg-lime transition-all duration-300 group-hover:w-full opacity-50"></span>
       </button>
     {/each}
   </div>
@@ -56,16 +56,14 @@
         class="h-full"
       >
         <article 
-          class="group relative h-full bg-surface border border-white/5 overflow-hidden hover:border-lime/40 transition-colors duration-300"
+          class="group relative h-full bg-surface border border-white/5 overflow-hidden hover:border-lime/40 transition-colors duration-300 flex flex-col md:grid md:grid-cols-[1.2fr_1fr]"
         >
-          <div class="absolute top-0 left-0 w-2 h-2 border-t border-l border-white/20 group-hover:border-lime transition-colors"></div>
-          <div class="absolute top-0 right-0 w-2 h-2 border-t border-r border-white/20 group-hover:border-lime transition-colors"></div>
-          <div class="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-white/20 group-hover:border-lime transition-colors"></div>
-          <div class="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-white/20 group-hover:border-lime transition-colors"></div>
+          <div class="absolute top-0 left-0 w-2 h-2 border-t border-l border-white/20 group-hover:border-lime transition-colors z-30"></div>
+          <div class="absolute top-0 right-0 w-2 h-2 border-t border-r border-white/20 group-hover:border-lime transition-colors z-30"></div>
+          <div class="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-white/20 group-hover:border-lime transition-colors z-30"></div>
+          <div class="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-white/20 group-hover:border-lime transition-colors z-30"></div>
 
-          <div class="grid grid-cols-1 md:grid-cols-[1.2fr_1fr] h-full">
-            
-            <div class="p-8 flex flex-col justify-between relative z-20 bg-noise">
+            <div class="p-8 flex flex-col justify-between relative z-20 bg-noise border-r border-white/5 h-full">
               
               <div>
                 <div class="flex justify-between items-start mb-6">
@@ -100,19 +98,30 @@
 
             </div>
 
-            <div class="relative h-64 md:h-auto overflow-hidden border-t md:border-t-0 md:border-l border-white/5 bg-void">
-                <div class="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent group-hover:opacity-50 transition-opacity duration-500"></div>
+            <div class="relative h-64 md:h-auto overflow-hidden bg-void group-image-wrapper">
                 
-                <div class="absolute inset-0 bg-[size:20px_20px] bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)]"></div>
+                {#if project.data.image}
+                  <img 
+                    src={project.data.image.src} 
+                    alt={project.data.title}
+                    class="absolute inset-0 w-full h-full object-cover 
+                           opacity-50 grayscale mix-blend-luminosity
+                           group-hover:opacity-100 group-hover:grayscale-0 group-hover:mix-blend-normal group-hover:scale-105
+                           transition-all duration-700 ease-out"
+                  />
+                {/if}
 
-                <div class="absolute bottom-0 right-0 p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                    <div class="w-10 h-10 bg-lime text-void flex items-center justify-center">
+                <div class="absolute inset-0 bg-linear-to-t from-void via-void/20 to-transparent opacity-80 group-hover:opacity-40 transition-opacity duration-500"></div>
+                
+                <div class="absolute inset-0 bg-size:20px_20px bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] pointer-events-none"></div>
+
+                <div class="absolute bottom-0 right-0 p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-20">
+                    <div class="w-10 h-10 bg-lime text-void flex items-center justify-center shadow-[0_0_15px_rgba(204,255,0,0.4)]">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
                     </div>
                 </div>
             </div>
 
-          </div>
         </article>
       </div>
     {/each}
