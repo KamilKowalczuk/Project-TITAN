@@ -1,12 +1,11 @@
 ---
-// CyberGrid.astro - Wersja Cinematic Depth of Field
+// CyberGrid.astro - Mobile Optimized & Firefox Safe
 ---
 
 <div class="cyber-scene">
   <div class="grid-wrapper">
     <div class="grid-texture"></div>
   </div>
-  
   <div class="horizon-dof"></div>
 </div>
 
@@ -16,45 +15,25 @@
     inset: 0;
     width: 100%;
     height: 100%;
+    /* DESKTOP: Głęboka perspektywa */
     perspective: 450px;
-    overflow: hidden;
+    overflow: hidden; /* Kluczowe dla Firefoxa */
     pointer-events: none;
     background: transparent;
-
-    /* ZMIANA 1: Agresywniejsza maska widoczności.
-       Przesunąłem start widoczności z 30% na 50%.
-       Ukrywamy "brzydki" koniec siatki całkowicie.
-    */
-    mask-image: linear-gradient(to bottom, 
-      transparent 0%, 
-      transparent 50%, 
-      black 90%, 
-      black 100%
-    );
-    -webkit-mask-image: linear-gradient(to bottom, 
-      transparent 0%, 
-      transparent 50%, 
-      black 90%, 
-      black 100%
-    );
+    
+    mask-image: linear-gradient(to bottom, transparent 0%, transparent 50%, black 90%, black 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, transparent 50%, black 90%, black 100%);
   }
 
-  /* NOWOŚĆ: Styl dla Głębi Ostrości */
   .horizon-dof {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 60%; /* Zajmuje górne 60% ekranu */
+    height: 60%;
     z-index: 10;
-    
-    /* MAGIA: Rozmywamy wszystko, co jest pod spodem (siatkę i wideo) */
-    /* 3px to wystarczająco, żeby zabić migotanie */
     backdrop-filter: blur(3px);
     -webkit-backdrop-filter: blur(3px);
-
-    /* Maska gradientowa dla samego blura */
-    /* Góra jest mocno rozmyta (black), dół jest ostry (transparent) */
     mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
     -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
   }
@@ -65,46 +44,71 @@
     left: 0;
     width: 100%;
     height: 100%;
+    /* DESKTOP: Standardowe pochylenie */
     transform: rotateX(80deg);
     transform-style: preserve-3d;
   }
 
   .grid-texture {
     position: absolute;
-    top: -100%; 
-    left: -100%;
-    width: 300%;
-    height: 300%;
+    /* Rozmiar tekstury musi być ogromny, żeby przy obrocie nie uciekła z ekranu */
+    top: -150%; 
+    left: -150%;
+    width: 400%; /* Zwiększamy zapas na boki */
+    height: 400%;
     
-    /* Linie: Ostre, wyraziste kolory */
     background-image: 
       /* MAJOR (Limonka) */
       linear-gradient(90deg, rgba(204, 255, 0, 0.5) 2px, transparent 2px),
       linear-gradient(180deg, rgba(204, 255, 0, 0.5) 2px, transparent 2px),
-
       /* MINOR (Białe) */
       linear-gradient(90deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px),
       linear-gradient(180deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
 
-    background-size: 
-      200px 200px, 
-      200px 200px, 
-      40px 40px, 
-      40px 40px;
+    /* DESKTOP: Standardowy rozmiar kratki */
+    background-size: 200px 200px, 200px 200px, 40px 40px, 40px 40px;
 
-    /* Powolny, dostojny lot (6s) */
     animation: grid-fly 6s linear infinite;
-    
     will-change: transform;
     backface-visibility: hidden;
   }
 
   @keyframes grid-fly {
-    0% {
-      transform: translateY(0);
+    0% { transform: translateY(0); }
+    100% { transform: translateY(200px); } /* Musi pasować do Major Grid Size */
+  }
+
+  /* --- MOBILE OPTIMIZATION --- */
+  @media (max-width: 768px) {
+    .cyber-scene {
+      /* Zmniejszamy perspektywę na mobile - to "przybliża" podłogę i zwiększa dynamikę */
+      perspective: 250px; 
+      
+      /* Maska musi zaczynać się niżej na małym ekranie */
+      mask-image: linear-gradient(to bottom, transparent 0%, transparent 40%, black 80%, black 100%);
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, transparent 40%, black 80%, black 100%);
     }
-    100% {
-      transform: translateY(200px);
+
+    .grid-wrapper {
+        /* Bardziej agresywne pochylenie na mobile */
+        transform: rotateX(75deg);
     }
+
+    .grid-texture {
+      /* Zmieniamy rozmiar kratki na mobile! */
+      /* Kratka musi być gęstsza, żeby na wąskim ekranie było widać więcej linii */
+      background-size: 
+        100px 100px, 100px 100px,  /* Major: mniejszy (100px) */
+        20px 20px, 20px 20px;      /* Minor: mniejszy (20px) */
+        
+      /* Skoro kratka jest mniejsza (100px), animacja też musi być krótsza */
+      animation: grid-fly-mobile 6s linear infinite;
+    }
+  }
+
+  /* Osobna klatka kluczowa dla mobile, bo przesunięcie to teraz 100px a nie 200px */
+  @keyframes grid-fly-mobile {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(100px); }
   }
 </style>
