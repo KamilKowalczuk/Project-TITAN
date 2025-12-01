@@ -8,10 +8,10 @@ const DownloadIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height=
 
 <section class="relative h-dvh w-full flex items-center justify-center overflow-hidden bg-black">
   
-  <div class="absolute inset-0 z-0">
+  <div class="absolute inset-0 z-0 overflow-hidden">
     <video 
       id="hero-video"
-      class="w-full h-full object-cover opacity-50 mix-blend-luminosity" 
+      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 min-w-full min-h-full w-auto h-[120vh] object-cover opacity-50 mix-blend-luminosity will-change-transform" 
       muted 
       loop 
       playsinline
@@ -72,8 +72,6 @@ const DownloadIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height=
     const video = document.getElementById('hero-video') as HTMLVideoElement;
     if (!video) return;
 
-    // Prosta, brutalna siła dla Firefoxa
-    // Jeśli status jest 'HAVE_NOTHING' (0), wymuszamy load()
     if (video.readyState === 0) {
         video.load();
     }
@@ -81,13 +79,11 @@ const DownloadIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height=
     const playPromise = video.play();
     if (playPromise !== undefined) {
         playPromise.catch((error) => {
-            console.log("Auto-play prevented (Low Power Mode?):", error);
+            console.log("Auto-play prevented:", error);
         });
     }
   };
 
-  // Uruchamiamy szybciej (100ms), nie ma co czekać 4s, jeśli mamy lekki plik
-  // Browser sam zdecyduje czy ma zasoby
   if (document.readyState === 'complete') {
     initVideo();
   } else {
