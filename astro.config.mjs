@@ -3,26 +3,25 @@ import svelte from '@astrojs/svelte';
 import tailwindcss from '@tailwindcss/vite';
 import mdx from '@astrojs/mdx';
 
-// https://astro.build/config
 export default defineConfig({
   integrations: [svelte(), mdx()],
   vite: {
     plugins: [
       tailwindcss(),
     ],
-    // ROZWIĄZANIE PROBLEMU PRODUKCJI:
+    // FIX DLA PRODUKCJI I MOBILE:
     resolve: {
-      // Wymuszamy jedną instancję bibliotek. To naprawia błędy "instanceof" w Three.js
+      // Zapobiega duplikowaniu Three.js (crashuje scenę, gdy są dwie kopie)
       dedupe: ['three', '@threlte/core', '@threlte/extras']
     },
-    // Konfiguracja SSR (Server Side Rendering) dla builda
-    ssr: {
-      // Mówimy Vite, żeby przetworzył te paczki podczas budowania, zamiast zostawiać je jako zewnętrzne
-      noExternal: ['three', '@threlte/core', '@threlte/extras']
+    optimizeDeps: {
+      // Wymuszamy wstępne przetworzenie tych paczek.
+      // To rozwiązuje problem "białego ekranu" na mobile po deployu.
+      include: ['three', '@threlte/core', '@threlte/extras', '@threlte/extras > three']
     },
     build: {
-      // Zwiększamy limit ostrzeżeń, bo Three.js jest duży
-      chunkSizeWarningLimit: 1600,
+      // Upewniamy się, że kod jest zgodny ze starszymi przeglądarkami mobilnymi
+      target: 'esnext' 
     }
   },
 });

@@ -8,15 +8,15 @@
   const CELL_SIZE = 2;      
   const SECTION_SIZE = 20;  
 
-  // Bezpieczne sprawdzanie mobile
+  // Wykrywanie mobile tylko dla optymalizacji GEOMETRII (ilość linii), a nie wyłączania
   const isMobile = typeof window !== 'undefined' ? window.innerWidth < 768 : false;
 
-  // Optymalizacja siatki (zachowujemy to, bo jest dobre)
+  // Mobile: Siatka 30x30 (lżej). Desktop: 60x60 (ładniej).
   const currentGridSize = (isMobile ? [30, 30] : [60, 60]) as [number, number];
 
   useTask((delta: number) => {
-    // Na mobile nie liczymy pozycji (chociaż i tak komponent nie powinien być zamontowany przez SceneWrapper)
-    if (isMobile) return;
+    // USUNIĘTO BLOKADĘ: if (isMobile) return; 
+    // Teraz animacja działa wszędzie!
     zPosition = (zPosition + delta * SPEED) % SECTION_SIZE;
   });
 </script>
@@ -30,7 +30,7 @@
   }}
 />
 
-<T.Fog args={['#000000', 1, 25]} />
+<T.Fog args={['#000000', 5, 30]} />
 
 <T.Group position={[0, -4, 0]}> 
   <Grid
