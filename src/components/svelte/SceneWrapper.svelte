@@ -1,32 +1,51 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount, onDestroy, mount, unmount } from 'svelte';
   
-  // Zmienna z Dużej Litery - Svelte 5 potraktuje ją jako komponent
-  let System3D = $state<any>(null);
-  let showScene = $state(false);
+  // To jest nasz "uchwyt" do elementu w DOM
+  let container: HTMLElement | null = null;
+  // Tutaj przechowamy instancję aplikacji 3D, żeby móc ją zniszczyć przy wyjściu
+  let appInstance: any = null;
 
   onMount(() => {
-    const initLoad = async () => {
-      // 1. Importujemy SYSTEM (z Canvasem), a nie samą scenę
-      // Vite wydzieli to do osobnego pliku .js (code splitting)
-      const module = await import('./CyberSystem.svelte');
+    const init = async () => {
+      // 1. Mobile Guard: Jeśli to telefon, przerywamy. Nie pobieramy 3D.
+      if (window.matchMedia("(max-width: 768px)").matches) return;
       
-      // 2. Przypisujemy default export do zmiennej
-      System3D = module.default;
-      showScene = true;
+      // Jeśli kontener z jakiegoś powodu nie istnieje, też kończymy
+      if (!container) return;
+
+      try {
+        // 2. Pobieramy plik. To jest moment, w którym leci request sieciowy.
+        const module = await import('./CyberSystem.svelte');
+        const Component = module.default;
+
+        // 3. MANUAL MOUNT (To jest klucz do sukcesu)
+        // Zamiast wrzucać komponent do HTML-a poniżej, montujemy go ręcznie funkcją JS.
+        // Dzięki temu Svelte/Vite nie wtrąca się w to, czym jest "Component".
+        appInstance = mount(Component, {
+          target: container,
+        });
+
+      } catch (e) {
+        console.error("3D Load Error:", e);
+      }
     };
 
+    // Smart Idle Strategy
     if ('requestIdleCallback' in window) {
-        // Czekamy na luz procesora (max 4 sekundy)
-        requestIdleCallback(() => initLoad(), { timeout: 4000 });
+      // Rzutowanie (window as any) żeby TS nie krzyczał
+      (window as any).requestIdleCallback(init, { timeout: 4000 });
     } else {
-        setTimeout(initLoad, 1000);
+      setTimeout(init, 1500);
+    }
+  });
+
+  onDestroy(() => {
+    // Sprzątamy pamięć (WebGL Context) przy zmianie strony
+    if (appInstance) {
+      unmount(appInstance);
     }
   });
 </script>
 
-{#if showScene && System3D}
-  <div class="absolute inset-0 w-full h-full animate-in fade-in duration-1000">
-    <System3D />
-  </div>
-{/if}
+<div bind:this={container} class="absolute inset-0 w-full h-full animate-in fade-in duration-1000"></div>
