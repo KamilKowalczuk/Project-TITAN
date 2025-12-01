@@ -1,27 +1,27 @@
 import { defineConfig } from 'astro/config';
 import svelte from '@astrojs/svelte';
-import tailwindcss from '@tailwindcss/vite';
+import tailwindcss from '@tailwindcss/vite'; //
 import mdx from '@astrojs/mdx';
 
 export default defineConfig({
   integrations: [svelte(), mdx()],
   vite: {
     plugins: [
-      tailwindcss(),
+      tailwindcss(), //
     ],
-    // FIX DLA PRODUKCJI I MOBILE:
+    // FIX DLA PRODUKCJI:
     resolve: {
-      // Zapobiega duplikowaniu Three.js (crashuje scenę, gdy są dwie kopie)
       dedupe: ['three', '@threlte/core', '@threlte/extras']
     },
     optimizeDeps: {
-      // Wymuszamy wstępne przetworzenie tych paczek.
-      // To rozwiązuje problem "białego ekranu" na mobile po deployu.
       include: ['three', '@threlte/core', '@threlte/extras', '@threlte/extras > three']
     },
     build: {
-      // Upewniamy się, że kod jest zgodny ze starszymi przeglądarkami mobilnymi
-      target: 'esnext' 
+      // ZMIANA: 'esnext' -> 'es2020'
+      // To naprawia błąd "Cannot use import.meta outside a module"
+      target: 'es2020',
+      cssCodeSplit: true,
+      chunkSizeWarningLimit: 2000,
     }
   },
 });
