@@ -7,7 +7,7 @@ const projects = defineCollection({
   // base: Ścieżka relatywna od pliku konfiguracyjnego do folderu z plikami
   loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/projects" }),
   
-  schema: ({ image }) => z.object({    title: z.string(),
+  schema: z.object({    title: z.string(),
     subtitle: z.string(),
     cluster: z.enum(['engineering', 'modern_web', 'ecommerce', 'deep_tech']),
     metrics: z.string(),
@@ -15,7 +15,6 @@ const projects = defineCollection({
     isFeatured: z.boolean().default(false),
     liveUrl: z.string().url().optional(),
     order: z.number().default(99),
-    image: image(),
   }),
 });
 
