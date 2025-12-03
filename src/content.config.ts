@@ -2,12 +2,13 @@ import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
 const projects = defineCollection({
-  // LOADER GLOB:
-  // pattern: Szukamy plików .md ORAZ .mdx
-  // base: Ścieżka relatywna od pliku konfiguracyjnego do folderu z plikami
   loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/projects" }),
   
-  schema: z.object({    title: z.string(),
+  // ZMIANA TUTAJ:
+  // Zamiast: schema: z.object({...})
+  // Musi być funkcja strzałkowa: schema: ({ image }) => z.object({...})
+  schema: ({ image }) => z.object({
+    title: z.string(),
     subtitle: z.string(),
     cluster: z.enum(['engineering', 'modern_web', 'ecommerce', 'deep_tech']),
     metrics: z.string(),
@@ -15,7 +16,9 @@ const projects = defineCollection({
     isFeatured: z.boolean().default(false),
     liveUrl: z.string().url().optional(),
     order: z.number().default(99),
-  }),
+    
+    // Teraz 'image()' zadziała, bo pochodzi z argumentu funkcji powyżej
+    image: image().optional(),  }),
 });
 
 export const collections = { projects };
