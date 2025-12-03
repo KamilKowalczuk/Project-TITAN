@@ -2,11 +2,15 @@
   import { fade } from 'svelte/transition';
   import { flip } from 'svelte/animate';
   import { onMount } from 'svelte';
+  
+  // Importujemy komponent modala
+  import ProjectModal from './ProjectModal.svelte';
 
   let { projects = [] } = $props();
 
   let activeCluster = $state('all');
   let activeProjectId = $state<string | null>(null);
+  let selectedProject = $state<any>(null);
 
   const clusters = [
     { id: 'all', label: '// ALL_SYSTEMS' },
@@ -21,6 +25,16 @@
       ? projects 
       : projects.filter(p => p.data.cluster === activeCluster)
   );
+
+  function openProject(project: any) {
+    selectedProject = project;
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeProject() {
+    selectedProject = null;
+    document.body.style.overflow = '';
+  }
 
   // SKANER (Mobile)
   let observer: IntersectionObserver;
@@ -62,7 +76,6 @@
     };
   }
 
-  // Generowanie losowego wykresu dla E-commerce
   function generateChartPath(id: string) {
     const seed = id.charCodeAt(0) + id.charCodeAt(id.length - 1);
     let path = "M0,80 ";
@@ -73,6 +86,26 @@
     }
     return path;
   }
+
+  const archFastfetch = `                   -\`
+                  .o+\`
+                 \`ooo/
+                \`+oooo:
+               \`+oooooo:
+               -+oooooo+:
+             \`/:-:++oooo+:
+            \`/++++/+++++++:
+           \`/++++++++++++++:
+          \`/+++ooooooooooooo/\`
+         ./ooosssso++osssssso+\`
+        .oossssso-\`\`\`\`/ossssss+\`
+       -osssssso.      :ssssssso.
+      :osssssss/        osssso+++.
+     /ossssssss/        +ssssooo/-
+   \`/ossssso+/:-        -:/+osssso+-
+  \`+sso+:-                 \`.-/+oso:
+ \`++:.                           \`-/+/
+ .\`                                 \`/`;
 </script>
 
 <div class="w-full relative z-10">
@@ -96,6 +129,10 @@
     {/each}
   </div>
 
+  {#if selectedProject}
+    <ProjectModal project={selectedProject} onClose={closeProject} />
+  {/if}
+
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
     {#each filteredProjects as project (project.id)}
       <div 
@@ -105,9 +142,13 @@
         use:registerRef={project.id}
         data-id={project.id}
       >
-        <article 
-          class="group relative h-full bg-surface border border-white/5 overflow-hidden transition-all duration-500 flex flex-col md:grid md:grid-cols-[1.2fr_1fr]
+        <div 
+          onclick={() => openProject(project)}
+          class="group relative h-full bg-surface border border-white/5 overflow-hidden transition-all duration-500 flex flex-col md:grid md:grid-cols-[1.2fr_1fr] cursor-pointer
           {activeProjectId === project.id ? 'is-active border-lime/40 shadow-[0_0_40px_rgba(204,255,0,0.15)]' : 'hover:border-lime/40'}"
+          role="button"
+          tabindex="0"
+          onkeydown={(e) => e.key === 'Enter' && openProject(project)}
         >
           <div class="absolute top-0 left-0 w-2 h-2 border-t border-l border-white/20 group-hover:border-lime group-[.is-active]:border-lime transition-colors z-30"></div>
           <div class="absolute top-0 right-0 w-2 h-2 border-t border-r border-white/20 group-hover:border-lime group-[.is-active]:border-lime transition-colors z-30"></div>
@@ -208,28 +249,46 @@
 
                     {:else if project.data.cluster === 'engineering'}
                         <div class="h-8 w-full bg-[#080808] border-b border-white/10 flex items-center px-4 justify-between relative z-20">
-                             <div class="text-[9px] font-mono text-white/50 tracking-widest uppercase">NODE_EDITOR // v2.4</div>
-                             <div class="w-2 h-2 rounded-full bg-lime/50 animate-pulse"></div>
+                             <div class="text-[9px] font-mono text-white/50 tracking-widest uppercase">RETENTION_FLOW // AUTO</div>
+                             <div class="flex items-center gap-1.5">
+                                <span class="text-[8px] font-mono text-lime">RUNNING</span>
+                                <div class="w-1.5 h-1.5 rounded-full bg-lime animate-pulse"></div>
+                             </div>
                         </div>
                         <div class="w-full h-[calc(100%-2rem)] bg-[#050505] relative flex items-center justify-center p-2">
-                            <svg class="w-full h-full" viewBox="0 0 200 100" preserveAspectRatio="xMidYMid meet">
+                            <svg class="w-full h-full" viewBox="0 0 240 100" preserveAspectRatio="xMidYMid meet">
                                 <defs>
-                                    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-                                        <feGaussianBlur stdDeviation="2" result="blur" />
+                                    <filter id="glow-flow" x="-20%" y="-20%" width="140%" height="140%">
+                                        <feGaussianBlur stdDeviation="1.5" result="blur" />
                                         <feComposite in="SourceGraphic" in2="blur" operator="over" />
                                     </filter>
                                 </defs>
-                                <path d="M40,50 L85,50 L115,50 L160,50" stroke="#222" stroke-width="2" fill="none" />
-                                <path d="M40,50 L85,50 L115,50 L160,50" stroke="#CCFF00" stroke-width="2" fill="none" 
-                                      stroke-dasharray="10 190" stroke-dashoffset="200"
-                                      filter="url(#glow)"
-                                      class="transition-all duration-[2s] ease-linear group-hover:animate-dash group-[.is-active]:animate-dash" />
-                                <rect x="25" y="35" width="30" height="30" rx="4" fill="#111" stroke="#444" stroke-width="1.5" />
-                                <text x="40" y="53" font-family="monospace" font-size="6" fill="#666" text-anchor="middle">DB</text>
-                                <circle cx="100" cy="50" r="18" fill="#111" stroke="#CCFF00" stroke-width="1.5" class="group-hover:fill-lime/10 transition-colors" />
-                                <text x="100" y="53" font-family="monospace" font-size="8" fill="#fff" text-anchor="middle">AI</text>
-                                <rect x="145" y="35" width="30" height="30" rx="4" fill="#111" stroke="#444" stroke-width="1.5" />
-                                <text x="160" y="53" font-family="monospace" font-size="6" fill="#666" text-anchor="middle">OUT</text>
+                                <path d="M30,50 L90,50 L150,50 L210,50" stroke="#222" stroke-width="2" fill="none" />
+                                <path d="M30,50 L90,50 L150,50 L210,50" stroke="#CCFF00" stroke-width="1.5" fill="none" 
+                                      stroke-dasharray="10 230" stroke-dashoffset="240"
+                                      filter="url(#glow-flow)"
+                                      class="transition-all duration-[2.5s] ease-linear group-hover:animate-dash group-[.is-active]:animate-dash opacity-0 group-hover:opacity-100 group-[.is-active]:opacity-100" />
+                                <g class="group/node">
+                                    <path d="M15,45 C15,40 45,40 45,45 L45,55 C45,60 15,60 15,55 Z" fill="#111" stroke="#444" stroke-width="1.5" class="group-hover:stroke-white transition-colors"/>
+                                    <ellipse cx="30" cy="45" rx="15" ry="5" fill="#1a1a1a" stroke="#444" stroke-width="1.5" class="group-hover:stroke-white transition-colors"/>
+                                    <text x="30" y="72" font-family="monospace" font-size="6" fill="#666" text-anchor="middle" class="group-hover:fill-lime transition-colors">DB</text>
+                                </g>
+                                <g class="group/node">
+                                    <circle cx="90" cy="50" r="14" fill="#111" stroke="#444" stroke-width="1.5" class="group-hover:stroke-white transition-colors" />
+                                    <path d="M90,50 L90,42 M90,50 L95,50" stroke="#666" stroke-width="1.5" stroke-linecap="round" class="group-hover:stroke-lime transition-colors" />
+                                    <text x="90" y="72" font-family="monospace" font-size="6" fill="#666" text-anchor="middle" class="group-hover:fill-lime transition-colors">WAIT 2Y</text>
+                                </g>
+                                <g class="group/node">
+                                    <rect x="136" y="36" width="28" height="28" rx="4" fill="#111" stroke="#444" stroke-width="1.5" class="group-hover:stroke-white transition-colors" />
+                                    <path d="M142,50 L158,50 M150,42 L150,58" stroke="#CCFF00" stroke-width="1.5" opacity="0.3" class="group-hover:opacity-100 transition-opacity" />
+                                    <circle cx="150" cy="50" r="2" fill="#CCFF00" class="opacity-0 group-hover:opacity-100 transition-opacity" />
+                                    <text x="150" y="72" font-family="monospace" font-size="6" fill="#666" text-anchor="middle" class="group-hover:fill-lime transition-colors">AI PROC</text>
+                                </g>
+                                <g class="group/node">
+                                    <rect x="196" y="40" width="28" height="20" rx="2" fill="#111" stroke="#444" stroke-width="1.5" class="group-hover:stroke-white transition-colors" />
+                                    <path d="M196,40 L210,52 L224,40" fill="none" stroke="#444" stroke-width="1" class="group-hover:stroke-white transition-colors" />
+                                    <text x="210" y="72" font-family="monospace" font-size="6" fill="#666" text-anchor="middle" class="group-hover:fill-lime transition-colors">SEND</text>
+                                </g>
                             </svg>
                             <div class="absolute inset-0 bg-linear-to-tr from-transparent via-white/5 to-transparent skew-x-12 translate-x-[-150%] group-hover:translate-x-[150%] group-[.is-active]:translate-x-[150%] transition-transform duration-1000 ease-in-out pointer-events-none z-30 mix-blend-overlay"></div>
                         </div>
@@ -238,34 +297,38 @@
                         <div class="h-8 w-full bg-[#050505] border-b border-white/10 flex items-center px-4 justify-between relative z-20">
                             <div class="flex items-center gap-2 font-mono text-[9px] text-subtext/60">
                                 <span class="w-2 h-2 rounded-full bg-white/10"></span>
-                                <span>TERMINAL_SESSION</span>
+                                <span>TERMINAL</span>
                             </div>
-                            <span class="font-mono text-[9px] text-lime">root@titan</span>
+                            <div class="flex gap-1.5">
+                                <div class="w-1.5 h-1.5 rounded-full bg-[#ff5f56] opacity-50"></div>
+                                <div class="w-1.5 h-1.5 rounded-full bg-[#ffbd2e] opacity-50"></div>
+                                <div class="w-1.5 h-1.5 rounded-full bg-[#27c93f] opacity-50"></div>
+                            </div>
                         </div>
-                        <div class="w-full h-[calc(100%-2rem)] bg-[#020202] p-4 font-mono text-[10px] md:text-xs text-subtext leading-relaxed overflow-hidden relative">
-                            <div class="opacity-60 mb-2">> neofetch --config minimalist</div>
-                            <div class="flex gap-4 mb-4 items-start">
-                                <div class="text-lime text-[8px] leading-[1.1] whitespace-pre font-bold pt-1">
-      /\
-     /  \
-    /    \
-   /      \
-  /   ,,   \
- /   |  |   \
-/_-''    ''-_\
+                        <div class="w-full h-[calc(100%-2rem)] bg-[#0a0a0a] p-4 font-mono leading-none overflow-hidden relative flex flex-col justify-center">
+                            <div class="text-[9px] text-white/50 mb-3 font-bold font-mono">
+                                <span class="text-lime">➜</span> <span class="text-cyan-400">~</span> fastfetch
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <div class="text-cyan-400 text-[5px] leading-[1.1] whitespace-pre font-bold shrink-0 opacity-90">
+{archFastfetch}
                                 </div>
-                                <div>
-                                    <div><span class="text-lime">OS</span>: Titan Arch Linux</div>
-                                    <div><span class="text-lime">Kernel</span>: 6.8.9-zen</div>
-                                    <div><span class="text-lime">Uptime</span>: 99.9%</div>
-                                    <div><span class="text-lime">Shell</span>: zsh</div>
+                                <div class="text-[9px] leading-relaxed space-y-1 z-10 w-full">
+                                    <div class="flex"><span class="text-cyan-400 w-10 font-bold">OS</span> <span class="text-white">Arch Linux</span></div>
+                                    <div class="flex"><span class="text-cyan-400 w-10 font-bold">Host</span> <span class="text-white">Titan WS</span></div>
+                                    <div class="flex"><span class="text-cyan-400 w-10 font-bold">Kernel</span> <span class="text-white">6.8.9-zen</span></div>
+                                    <div class="flex"><span class="text-cyan-400 w-10 font-bold">Uptime</span> <span class="text-lime">14 mins</span></div>
+                                    <div class="flex"><span class="text-cyan-400 w-10 font-bold">Pkgs</span> <span class="text-white">1556</span></div>
+                                    <div class="flex gap-1 mt-2 pt-1 opacity-80">
+                                        <div class="w-2 h-2 bg-black"></div><div class="w-2 h-2 bg-red-500"></div>
+                                        <div class="w-2 h-2 bg-green-500"></div><div class="w-2 h-2 bg-yellow-500"></div>
+                                        <div class="w-2 h-2 bg-blue-500"></div><div class="w-2 h-2 bg-purple-500"></div>
+                                        <div class="w-2 h-2 bg-cyan-500"></div><div class="w-2 h-2 bg-white"></div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="opacity-60">> ./deploy_backend.sh</div>
-                            <div class="text-white mt-1">Connecting to cluster... <span class="text-lime">[OK]</span></div>
-                            <div class="text-white">Syncing database... <span class="text-lime">[OK]</span></div>
-                            <div class="mt-2 text-lime flex items-center gap-1">
-                                <span>_</span><span class="animate-pulse w-1.5 h-3 bg-lime block"></span>
+                            <div class="mt-auto text-lime text-[10px] flex items-center gap-1 pt-2">
+                                <span class="text-cyan-400">➜</span> <span class="text-white">~</span> <span class="animate-pulse block w-1.5 h-3 bg-lime"></span>
                             </div>
                             <div class="absolute inset-0 bg-linear-to-tr from-transparent via-white/5 to-transparent skew-x-12 translate-x-[-150%] group-hover:translate-x-[150%] group-[.is-active]:translate-x-[150%] transition-transform duration-1000 ease-in-out pointer-events-none z-30 mix-blend-overlay"></div>
                             <div class="absolute inset-0 bg-scanlines z-10 pointer-events-none opacity-20"></div>
@@ -318,7 +381,7 @@
                 </div>
             </div>
 
-        </article>
+        </div>
       </div>
     {/each}
   </div>
@@ -332,7 +395,7 @@
     transform-style: preserve-3d;
   }
 
-  /* KONTENER 3D: Animacja obrotu */
+  /* KONTENER 3D */
   .browser-deck {
     transform: rotateX(45deg) rotateZ(-10deg) rotateY(10deg) scale(0.9);
     box-shadow: 0 10px 20px rgba(0,0,0,0.5), 0 30px 60px rgba(0,0,0,0.3);
@@ -343,7 +406,7 @@
     box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 50px 100px rgba(0,0,0,0.5);
   }
   
-  /* WARSTWY: Logika rozsunięcia (Exploded View) */
+  /* WARSTWY */
   .layer-base {
     transform: translateZ(0);
   }
@@ -364,7 +427,7 @@
     transform: translateZ(-10px);
   }
 
-  /* CZYSTY CSS DLA GRIDA (Bez hakowania Tailwinda) */
+  /* GRIDS */
   .bg-grid-sm {
     background-size: 4px 4px;
   }
