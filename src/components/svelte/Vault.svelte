@@ -294,10 +294,10 @@
                         </div>
 
                     {:else if project.data.cluster === 'deep_tech'}
-                        <div class="h-8 w-full bg-[#050505] border-b border-white/10 flex items-center px-4 justify-between relative z-20">
+                        <div class="h-8 w-full bg-#050505 border-b border-white/10 flex items-center px-4 justify-between relative z-20">
                             <div class="flex items-center gap-2 font-mono text-[9px] text-subtext/60">
                                 <span class="w-2 h-2 rounded-full bg-white/10"></span>
-                                <span>TERMINAL</span>
+                                <span>KITTY</span>
                             </div>
                             <div class="flex gap-1.5">
                                 <div class="w-1.5 h-1.5 rounded-full bg-[#ff5f56] opacity-50"></div>
@@ -305,20 +305,25 @@
                                 <div class="w-1.5 h-1.5 rounded-full bg-[#27c93f] opacity-50"></div>
                             </div>
                         </div>
+                        
                         <div class="w-full h-[calc(100%-2rem)] bg-[#0a0a0a] p-4 font-mono leading-none overflow-hidden relative flex flex-col justify-center">
-                            <div class="text-[9px] text-white/50 mb-3 font-bold font-mono">
+                            
+                            <div class="text-[9px] text-white/50 mb-3 mt-3 font-bold font-mono">
                                 <span class="text-lime">➜</span> <span class="text-cyan-400">~</span> fastfetch
                             </div>
+
                             <div class="flex items-start gap-4">
                                 <div class="text-cyan-400 text-[5px] leading-[1.1] whitespace-pre font-bold shrink-0 opacity-90">
-{archFastfetch}
+                                    {archFastfetch}
                                 </div>
+
                                 <div class="text-[9px] leading-relaxed space-y-1 z-10 w-full">
                                     <div class="flex"><span class="text-cyan-400 w-10 font-bold">OS</span> <span class="text-white">Arch Linux</span></div>
-                                    <div class="flex"><span class="text-cyan-400 w-10 font-bold">Host</span> <span class="text-white">Titan WS</span></div>
-                                    <div class="flex"><span class="text-cyan-400 w-10 font-bold">Kernel</span> <span class="text-white">6.8.9-zen</span></div>
+                                    <div class="flex"><span class="text-cyan-400 w-10 font-bold">Kernel</span> <span class="text-white">6.17.9-cachyos</span></div>
+                                    <div class="flex"><span class="text-cyan-400 w-10 font-bold">CPU</span> <span class="text-white">i5-13600K</span></div>
                                     <div class="flex"><span class="text-cyan-400 w-10 font-bold">Uptime</span> <span class="text-lime">14 mins</span></div>
-                                    <div class="flex"><span class="text-cyan-400 w-10 font-bold">Pkgs</span> <span class="text-white">1556</span></div>
+                                    <div class="flex"><span class="text-cyan-400 w-10 font-bold">Shell</span> <span class="text-white">zsh 5.9</span></div>
+                                    
                                     <div class="flex gap-1 mt-2 pt-1 opacity-80">
                                         <div class="w-2 h-2 bg-black"></div><div class="w-2 h-2 bg-red-500"></div>
                                         <div class="w-2 h-2 bg-green-500"></div><div class="w-2 h-2 bg-yellow-500"></div>
@@ -327,9 +332,11 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="mt-auto text-lime text-[10px] flex items-center gap-1 pt-2">
                                 <span class="text-cyan-400">➜</span> <span class="text-white">~</span> <span class="animate-pulse block w-1.5 h-3 bg-lime"></span>
                             </div>
+
                             <div class="absolute inset-0 bg-linear-to-tr from-transparent via-white/5 to-transparent skew-x-12 translate-x-[-150%] group-hover:translate-x-[150%] group-[.is-active]:translate-x-[150%] transition-transform duration-1000 ease-in-out pointer-events-none z-30 mix-blend-overlay"></div>
                             <div class="absolute inset-0 bg-scanlines z-10 pointer-events-none opacity-20"></div>
                         </div>
