@@ -1,0 +1,11 @@
+**Wyzwanie**
+Chaotyczny przepływ dokumentów w firmie. Faktury, umowy i zapytania ofertowe wpadały do jednej skrzynki, wymagając ręcznego pobierania, kategoryzowania i wysyłania do księgowości. To generowało opóźnienia i ryzyko zagubienia plików.
+
+**Implementacja AI**
+Stworzyłem agenta AI wykorzystującego Make.com oraz Gemini 1.5 Pro.
+* **Analiza Semantyczna:** AI czyta treść maila i załączników, rozumiejąc kontekst (np. odróżnia fakturę zakupową od sprzedażowej).
+* **Router Danych:** Na podstawie typu dokumentu, plik trafia do dedykowanego folderu na Google Drive (np. `Księgowość/2024/05/Koszty`).
+* **Auto-Response:** System przygotowuje draft odpowiedzi potwierdzającej odbiór i oznacza maila odpowiednią etykietą.
+
+**Efekt**
+Całkowita eliminacja ręcznego sortowania poczty. Czas od otrzymania faktury do jej archiwizacji spadł z kilku godzin (lub dni) do 45 sekund.

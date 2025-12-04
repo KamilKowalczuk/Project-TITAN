@@ -2,11 +2,27 @@
 import { getCollection } from 'astro:content';
 import Vault from '../svelte/Vault.svelte';
 
-// 1. Pobranie wszystkich projektów z kolekcji
-const allProjects = await getCollection('projects');
+// 1. Pobranie danych kart (Frontmatter)
+const projectsData = await getCollection('projects');
 
-// 2. Sortowanie (według frontmatter 'order')
-const sortedProjects = allProjects.sort((a: typeof allProjects[0], b: typeof allProjects[0]) => a.data.order - b.data.order);
+// 2. Pobranie opisów (Body)
+const detailsData = await getCollection('details');
+
+// 3. DATA MERGE (Synteza)
+// Łączymy projekt z jego opisem na podstawie ID (nazwy pliku)
+const mergedProjects = projectsData.map((project) => {
+  // Szukamy pasującego pliku w folderze details
+  const detail = detailsData.find((d) => d.id === project.id);
+  
+  return {
+    ...project,
+    // Wstrzykujemy treść z pliku detali. Jeśli brak pliku - pusty string.
+    body: detail ? detail.body : "" 
+  };
+});
+
+// 4. Sortowanie
+const sortedProjects = mergedProjects.sort((a, b) => a.data.order - b.data.order);
 ---
 
 <section id="projects" class="relative py-32 bg-void overflow-hidden">

@@ -1,0 +1,12 @@
+**Problem Operacyjny**
+Proces weryfikacji terminów badań dla bazy 100 000 pacjentek był niewykonalny ręcznie. Personel medyczny tracił godziny na przeglądanie Exceli, co skutkowało niską powracalnością pacjentek i stratami finansowymi dla placówki.
+
+**Architektura Rozwiązania**
+Zaprojektowałem "cyfrowego anioła stróża" – autonomiczny system oparty o Python i Airtable.
+1. **Logika Czasowa:** System śledzi datę ostatniego badania każdej pacjentki.
+2. **Hibernacja:** Rekord jest "usypiany" na 23 miesiące.
+3. **Aktywacja:** Na miesiąc przed terminem refundacji NFZ, system automatycznie generuje "Lead" dla Call Center.
+4. **Analityka:** Dashboard w Looker Studio pokazuje skuteczność zaproszeń w czasie rzeczywistym.
+
+**Wynik Biznesowy**
+System przetwarza tysiące rekordów w sekundy. Wzrost powracalności pacjentek o 40%, pełne obłożenie grafików mammograficznych bez konieczności zatrudniania dodatkowych rejestratorek.

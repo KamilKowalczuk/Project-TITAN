@@ -1,12 +1,9 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
+// 1. Kolekcja Główna (Karty)
 const projects = defineCollection({
   loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/projects" }),
-  
-  // ZMIANA TUTAJ:
-  // Zamiast: schema: z.object({...})
-  // Musi być funkcja strzałkowa: schema: ({ image }) => z.object({...})
   schema: ({ image }) => z.object({
     title: z.string(),
     subtitle: z.string(),
@@ -16,9 +13,14 @@ const projects = defineCollection({
     isFeatured: z.boolean().default(false),
     liveUrl: z.string().url().optional(),
     order: z.number().default(99),
-    
-    // Teraz 'image()' zadziała, bo pochodzi z argumentu funkcji powyżej
-    image: image().optional(),  }),
+    image: image().optional(),
+  }),
 });
 
-export const collections = { projects };
+// 2. Kolekcja Detali (Opisy do Modala)
+// Tu trzymamy tylko tekst (body), więc schema może być puste
+const details = defineCollection({
+  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/details" }),
+});
+
+export const collections = { projects, details };
