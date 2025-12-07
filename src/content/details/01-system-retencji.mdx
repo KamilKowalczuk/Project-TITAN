@@ -1,12 +1,13 @@
-**Problem Operacyjny**
-Proces weryfikacji terminów badań dla bazy 100 000 pacjentek był niewykonalny ręcznie. Personel medyczny tracił godziny na przeglądanie Exceli, co skutkowało niską powracalnością pacjentek i stratami finansowymi dla placówki.
+## Problem Operacyjny
+Zarządzanie bazą 100 000+ pacjentek w programie profilaktyki raka piersi przy użyciu tradycyjnych metod (Excel/Papier) prowadziło do paraliżu. Rejestracja nie była w stanie ręcznie śledzić, kiedy mija 2-letni okres karencji, co skutkowało erozją bazy pacjentów i utratą gwarantowanych środków z NFZ na rzecz konkurencji.
 
-**Architektura Rozwiązania**
-Zaprojektowałem "cyfrowego anioła stróża" – autonomiczny system oparty o Python i Airtable.
-1. **Logika Czasowa:** System śledzi datę ostatniego badania każdej pacjentki.
-2. **Hibernacja:** Rekord jest "usypiany" na 23 miesiące.
-3. **Aktywacja:** Na miesiąc przed terminem refundacji NFZ, system automatycznie generuje "Lead" dla Call Center.
-4. **Analityka:** Dashboard w Looker Studio pokazuje skuteczność zaproszeń w czasie rzeczywistym.
+## Architektura Rozwiązania
+Stworzyłem "Cyfrowy System Wybudzania" oparty na logice pętli czasowej.
 
-**Wynik Biznesowy**
-System przetwarza tysiące rekordów w sekundy. Wzrost powracalności pacjentek o 40%, pełne obłożenie grafików mammograficznych bez konieczności zatrudniania dodatkowych rejestratorek.
+- **The Core:** Baza danych Airtable zintegrowana z customowym skryptem Python (hostowanym na Render.com).
+- **Logika Cyklu:** System automatycznie "usypia" rekord pacjentki po badaniu i "wybudza" go dokładnie 22 miesiące później.
+- **Dystrybucja:** Konsultanci otrzymują codziennie rano gotową listę "gorących leadów" do obdzwonienia, zanim zrobi to inna placówka.
+- **Live BI:** Dashboardy w Looker Studio odświeżane co 15 minut monitorują skuteczność każdego pracownika.
+
+## Wynik Biznesowy
+Wdrożenie pełnej automatyzacji procesu retencji. Placówka zyskała przewagę konkurencyjną, kontaktując się z pacjentką jako pierwsza na rynku. Eliminacja błędu ludzkiego przy weryfikacji dat uprawnień.

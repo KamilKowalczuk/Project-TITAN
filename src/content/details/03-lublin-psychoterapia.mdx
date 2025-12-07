@@ -1,10 +1,13 @@
-**Cel Projektu**
-Największa placówka psychoterapeutyczna w regionie potrzebowała platformy, która nie tylko informuje, ale aktywnie sprzedaje wizyty. Stara strona na Wordpressie była powolna i trudna w obsłudze na urządzeniach mobilnych.
+## Problem Operacyjny
+Duża placówka medyczna traciła potencjalnych pacjentów przez archaiczny proces umawiania wizyt (tylko telefon) i wolną stronę internetową. Brak integracji strony z kalendarzem lekarzy generował podwójne rezerwacje i frustrację personelu.
 
-**Stack Technologiczny**
-* **Frontend:** Astro.js (SSG) zapewniające błyskawiczne ładowanie.
-* **Integracja API:** Customowy konektor do systemu medycznego MyDr. Pacjent widzi wolne terminy lekarzy w czasie rzeczywistym bezpośrednio na stronie placówki.
-* **CMS:** Strapi Headless CMS pozwalający personelowi na łatwą edycję opisów specjalistów i artykułów blogowych bez dotykania kodu.
+## Architektura Rozwiązania
+Wdrożenie architektury Modern Web z głęboką integracją API.
 
-**Impact**
-Strona stała się głównym kanałem akwizycji pacjentów. Dzięki architekturze Astro, serwis osiąga wynik 98/100 na mobile, co drastycznie obniżyło koszt pozyskania klienta (CPC) w kampaniach Google Ads.
+- **Frontend:** Astro + Svelte dla błyskawicznego ładowania (PageSpeed 90+ na mobile).
+- **Integracja MyDr:** Napisałem customowy most (Bridge) do API zewnętrznego dostawcy oprogramowania medycznego. Pacjent widzi wolne sloty w czasie rzeczywistym bezpośrednio na stronie.
+- **Headless CMS:** Wdrożenie Strapi CMS, umożliwiające marketingowi edycję treści bez ingerencji w kod.
+- **Security:** Autorski moduł zarządzania zgodami (Consent Mode) zgodny z rygorystycznym RODO medycznym.
+
+## Wynik Biznesowy
+Przeniesienie 40% ruchu rezerwacyjnego do kanału online (odciążenie rejestracji). Radykalna poprawa widoczności w Google (SEO) dzięki optymalizacji technicznej.

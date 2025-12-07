@@ -1,11 +1,12 @@
-**Koncepcja**
-W branży medycznej dominują statyczne, "niebiesko-białe" strony. Celem było przełamanie schematu i stworzenie wizerunku marki Premium dla nowego podmiotu na rynku koordynacji opieki zdrowotnej.
+## Problem Operacyjny
+Nowa marka na rynku usług medycznych potrzebowała wyróżnić się na tle "sterylnej i nudnej" konkurencji. Wyzwaniem było stworzenie strony, która buduje wizerunek Premium i nowoczesności, nie poświęcając przy tym wydajności na urządzeniach mobilnych.
 
-**Inżynieria Wizualna**
-Zastosowałem technologię WebGL (Three.js) w środowisku Svelte.
-* **Interaktywność:** Elementy 3D reagują na ruch myszy i scrollowanie, tworząc głębię i angażując użytkownika.
-* **Optymalizacja:** Modele 3D zostały drastycznie zoptymalizowane (draco compression), aby "efekt wow" nie zabijał wydajności na smartfonach.
-* **Design System:** Nowoczesna typografia i mikro-interakcje budują zaufanie do technologicznego zaawansowania firmy.
+## Architektura Rozwiązania
+Hybrydowe podejście do designu i wydajności.
 
-**Rezultat**
-Strona, która zapada w pamięć. Klient odnotował, że partnerzy biznesowi często rozpoczynają spotkania od komplementowania jakości ich wizytówki w sieci.
+- **Visual Core:** Implementacja biblioteki Three.js do renderowania interaktywnych elementów 3D w przeglądarce (Desktop).
+- **Mobile Optimization:** Zastąpienie ciężkich skryptów 3D na telefonach lżejszą, natywną animacją CSS, zachowując spójność wizualną przy wyniku 90+ PageSpeed.
+- **Interakcja:** Mikro-interakcje reagujące na kursor, budujące poczucie "zanurzenia" w ofercie.
+
+## Wynik Biznesowy
+Stworzenie silnej tożsamości wizualnej ("Brand Anchor"), która pozycjonuje firmę jako lidera innowacji w swoim sektorze od pierwszego dnia działalności.

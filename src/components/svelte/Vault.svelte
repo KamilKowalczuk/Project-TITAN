@@ -37,15 +37,18 @@
   }
 
   // SKANER (Mobile)
-  let observer: IntersectionObserver;
+let observer: IntersectionObserver;
   let projectElements = new Map<string, HTMLElement>();
+  let activationTimer: any; // Zmienna do przechowywania timera
 
   onMount(() => {
+    // Sprawdzamy czy mobile (brak hovera)
     const isMobile = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
 
     if (isMobile) {
       const options = {
         root: null,
+        // Wąski pasek detekcji na środku ekranu
         rootMargin: '-45% 0px -45% 0px', 
         threshold: 0
       };
@@ -53,7 +56,22 @@
       observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            activeProjectId = entry.target.getAttribute('data-id');
+            const targetId = entry.target.getAttribute('data-id');
+            
+            // Jeśli to ten sam projekt, nic nie rób
+            if (targetId === activeProjectId) return;
+
+            // 1. ANULUJ poprzedni rozkaz. 
+            // Jeśli użytkownik szybko scrolluje, poprzednia karta nie zdąży się "zapalić".
+            if (activationTimer) clearTimeout(activationTimer);
+
+            // 2. CZEKAJ (Debounce).
+            // Ustawiamy opóźnienie 150ms.
+            // Animacja odpali się TYLKO jeśli użytkownik zatrzyma się na karcie (lub zwolni).
+            // Dzięki temu podczas szybkiego scrollowania nie odpalamy ciężkiego 3D.
+            activationTimer = setTimeout(() => {
+                activeProjectId = targetId;
+            }, 150); 
           }
         });
       }, options);
@@ -63,6 +81,7 @@
 
     return () => {
       if (observer) observer.disconnect();
+      if (activationTimer) clearTimeout(activationTimer);
     };
   });
 
