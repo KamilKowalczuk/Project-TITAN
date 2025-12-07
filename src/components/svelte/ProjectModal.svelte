@@ -37,7 +37,7 @@
 <svelte:window onkeydown={handleKeydown} />
 
 <div
-  class="fixed inset-0 z-[9999] flex items-center justify-center px-4 pt-24 pb-4 md:pt-32 md:pb-12 md:px-12"
+  class="fixed inset-0 z-9999 flex items-center justify-center px-4 pt-24 pb-4 md:pt-32 md:pb-12 md:px-12"
   transition:fade={{ duration: 200 }}
 >
   <div
@@ -49,7 +49,7 @@
   ></div>
 
   <div
-    class="relative w-full max-w-5xl max-h-full bg-[#050505] border border-lime/30 shadow-[0_0_100px_rgba(204,255,0,0.15)] flex flex-col overflow-hidden rounded-sm"
+    class="relative w-full max-w-5xl max-h-full bg-#050505 border border-lime/30 shadow-[0_0_100px_rgba(204,255,0,0.15)] flex flex-col overflow-hidden rounded-sm"
     transition:scale={{ start: 0.95, duration: 400, easing: quartOut }}
   >
     <div class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-lime z-50"></div>
@@ -80,7 +80,7 @@
       </button>
     </div>
 
-    <div class="flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar bg-[#050505]">
+    <div class="flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar bg-#050505">
       
       {#if project.data.image}
         <div class="relative w-full h-64 md:h-[500px] border-b border-lime/20 bg-black group overflow-hidden shrink-0">
@@ -90,7 +90,7 @@
             class="w-full h-full object-cover object-top opacity-90 transition-transform duration-1000 group-hover:scale-105"
           />
           <div class="absolute inset-0 bg-scanlines opacity-20 pointer-events-none"></div>
-          <div class="absolute inset-0 bg-linear-to-t from-[#050505] via-transparent to-transparent opacity-60"></div>
+          <div class="absolute inset-0 bg-linear-to-t from-#050505 via-transparent to-transparent opacity-60"></div>
         </div>
       {/if}
 

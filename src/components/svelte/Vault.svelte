@@ -207,12 +207,12 @@ let observer: IntersectionObserver;
               </div>
             </div>
 
-            <div class="relative h-72 md:h-auto bg-[#050505] group-image-wrapper perspective-1000 flex items-center justify-center overflow-hidden">
+            <div class="relative h-72 md:h-auto bg-#050505 group-image-wrapper perspective-1000 flex items-center justify-center overflow-hidden">
                 
                 <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(30,30,30,1)_0%,rgba(5,5,5,1)_100%)]"></div>
                 <div class="absolute inset-0 bg-grid-lg bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] opacity-20"></div>
 
-                <div class="browser-deck w-[85%] aspect-[16/10] relative transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] preserve-3d
+                <div class="browser-deck w-[85%] aspect-16/10 relative transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] preserve-3d
                             group-hover:transform-active group-[.is-active]:transform-active">
                   
                   <div class="absolute inset-0 bg-[#0a0a0a] border border-white/10 rounded-lg shadow-2xl overflow-hidden
@@ -256,7 +256,7 @@ let observer: IntersectionObserver;
                                 <div class="w-2.5 h-2.5 rounded-full bg-[#ffbd2e] shadow-[0_0_5px_rgba(255,189,46,0.3)] border border-black/20"></div>
                                 <div class="w-2.5 h-2.5 rounded-full bg-[#27c93f] shadow-[0_0_5px_rgba(39,201,63,0.3)] border border-black/20"></div>
                             </div>
-                            <div class="ml-4 w-full max-w-[160px] h-4 bg-black/30 rounded-full border border-white/5 shadow-inner"></div>
+                            <div class="ml-4 w-full max-w-160px h-4 bg-black/30 rounded-full border border-white/5 shadow-inner"></div>
                         </div>
                         <div class="relative w-full h-[calc(100%-2rem)] bg-black group-image-container">
                             {#if project.data.image}
@@ -274,7 +274,7 @@ let observer: IntersectionObserver;
                                 <div class="w-1.5 h-1.5 rounded-full bg-lime animate-pulse"></div>
                              </div>
                         </div>
-                        <div class="w-full h-[calc(100%-2rem)] bg-[#050505] relative flex items-center justify-center p-2">
+                        <div class="w-full h-[calc(100%-2rem)] bg-#050505 relative flex items-center justify-center p-2">
                             <svg class="w-full h-full" viewBox="0 0 240 100" preserveAspectRatio="xMidYMid meet">
                                 <defs>
                                     <filter id="glow-flow" x="-20%" y="-20%" width="140%" height="140%">
