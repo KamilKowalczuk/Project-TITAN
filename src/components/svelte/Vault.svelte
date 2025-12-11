@@ -455,7 +455,7 @@ let observer: IntersectionObserver;
 
   /* GRIDS */
   .bg-grid-sm {
-    background-size: 6px 4px;
+    background-size: 4px 4px;
   }
   .bg-grid-lg {
     background-size: 40px 40px;
